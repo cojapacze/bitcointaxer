@@ -1,0 +1,6 @@
+#testcase,Five5
+
+#wplata $100
+2017-03-17 12:02:23,US Bank,107,USD,Kraken.com,107,USD,deposit
+2017-03-18 12:04:45,Kraken.com,96,USD,Kraken.com,0.082716212,BTC
+2017-12-19 12:37:11,Kraken.com,0.082716212,BTC,Kraken.com,4.3992123321,LTC

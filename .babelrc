@@ -1,0 +1,9 @@
+{
+  "plugins": [
+    ["react-intl", {
+        "messagesDir": "./build/messages/",
+        "enforceDescriptions": false,
+        "extractSourceLocation": true
+    }]
+  ]
+}

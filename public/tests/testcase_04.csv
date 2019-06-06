@@ -1,0 +1,50 @@
+#testcase,Testcase04
+
+#2017-03-17 12:02:23,US Bank,500,PLN,US Bank,103,USD
+#wplata $100
+#2017-03-17 12:02:23,US Bank,103,USD,Kraken.com,103,USD,deposit
+#2017-03-17 12:02:24,US Bank,201,USD,Kraken.com,201,USD,deposit
+#2017-03-17 12:02:25,US Bank,300,USD,Kraken.com,300,USD,deposit
+#2017-03-17 12:02:26,US Bank,50,USD,Kraken.com,50,USD,deposit
+#2017-03-17 12:02:27,US Bank,50,EUR,Kraken.com,50,EUR,deposit
+#2017-03-17 12:02:28,US Bank,50,EUR,Kraken.com,50,EUR,deposit
+#2017-03-17 12:02:29,US Bank,50,EUR,Kraken.com,50,EUR,deposit
+
+#zakup
+#2017-03-18 12:04:45,Kraken.com,100,USD,Kraken.com,0.082716212,BTC
+2017-03-18 12:04:46,Kraken.com,50,USD,Kraken.com,0.041313111,BTC
+#wymiana na LTC
+2017-12-19 12:37:11,Kraken.com,0.082716212,BTC,Kraken.com,4.3992123321,LTC
+2017-12-19 12:37:12,Kraken.com,0.041313111,BTC,Kraken.com,2.19999998872,LTC
+
+#komunikat MF
+#2018-04-04 13:12:21,Kraken.com,4.3992123321,LTC,Kraken.com,506.83,USD
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#2017-04-17 12:01:00,mBank,1000,PLN,BitBay.net,1000,PLN
+#2017-04-19 12:01:02,BitBay.net,1000,PLN,BitBay.net,0.3,BTC
+#2017-12-19 12:03:02,BitBay.net,0.3,BTC,BitBay.net,200,LSK
+#2018-04-19 12:04:02,BitBay.net,200,LSK,BitBay.net,1100,PLN
+

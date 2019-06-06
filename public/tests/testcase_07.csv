@@ -1,0 +1,8 @@
+#testcase,Beta
+
+2017-04-16 12:00:00,Alior Bank,100,USD,kraken.com,100,USD
+2017-04-16 17:00:00,mBank,1000,PLN,bitbay.net,1000,PLN
+
+2017-04-17 12:00:01,kraken.com,100,USD,kraken.com,0.084265,BTC
+2017-04-17 12:00:02,kraken.com,100,USD,kraken.com,3,DUPA
+2017-04-17 17:00:03,mBank,1000,PLN,bitbay.net,1000,PLN
