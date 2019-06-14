@@ -40,8 +40,13 @@ function getOperations(file) {
         record.base_total_less_fee = parseFloat(record.rawCSVLine[9]);
         record.quote_total_less_fee = parseFloat(record.rawCSVLine[10]);
         record.recordRaw = record;
-        if (record.category !== 'Exchange') {
-            throw new Error('Nieznana kategoria rekordu!');
+        switch (record.category) {
+        case 'Exchange':
+        case 'Settlement':
+        case 'Margin trade':
+            break;
+        default:
+            console.error(`Unknown record category: ${record.category}!`, record);
         }
         if (record.type === 'Buy') {
             from = {
