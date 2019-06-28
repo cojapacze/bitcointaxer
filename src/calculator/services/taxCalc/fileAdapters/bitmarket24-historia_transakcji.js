@@ -1,7 +1,8 @@
 const domain = 'bitmarket24.pl';
 const adapter = 'historia_transakcji';
 
-const csvParseConfig = {
+const parseConfig = {
+    type: 'csv',
     delimiter: ','
 };
 
@@ -63,6 +64,6 @@ export default {
     pluginname: `${domain}-${adapter}`,
     pluginfilename: __filename,
     match,
-    csvParseConfig,
+    parseConfig,
     getOperations
 };

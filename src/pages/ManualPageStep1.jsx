@@ -10,6 +10,29 @@ const CalculatorPageStep1 = () => (
       <div className="manual-exchanges">
         <Card
           className="manual-exchange-card"
+          title="binance.com"
+        >
+          <p>Wyeksportuj do wspólnego <b>katalogu</b> plik:</p>
+          <ul>
+            <li>TradeHistory.xlsx <a
+              rel="noopener noreferrer"
+              target="_blank"
+              href="https://www.binance.com/pl/usercenter/history/user-trade"
+            >&raquo;</a></li>
+            <li hidden>DepositHistory.csv <a
+              rel="noopener noreferrer"
+              target="_blank"
+              href="https://www.binance.com/pl/usercenter/wallet/money-log/deposit"
+            >&raquo;</a></li>
+            <li hidden>WithdrawalHistory.csv <a
+              rel="noopener noreferrer"
+              target="_blank"
+              href="https://www.binance.com/pl/usercenter/wallet/money-log/withdraw"
+            >&raquo;</a></li>
+          </ul>
+        </Card>
+        <Card
+          className="manual-exchange-card"
           title="kraken.com"
           extra={<a
             rel="noopener noreferrer"
@@ -83,6 +106,19 @@ const CalculatorPageStep1 = () => (
             <li>bitbay.net-HistoriaSzczegolowa-2018-10-01_2018-12-31.csv</li>
             <li>...</li>
             {/* <li><i>lub Historia Transakcjie + Wpłaty/Wypłaty (csv pl)</i></li> */}
+          </ul>
+        </Card>
+        <Card
+          className="manual-exchange-card"
+          title="bitmarket.pl"
+        >
+          <p>Wyeksportuj do wspólnego <b>katalogu</b> plik:</p>
+          <ul>
+            <li>BITMARKET export.xlsx <a
+              rel="noopener noreferrer"
+              target="_blank"
+              href="https://www.bitmarket.pl/"
+            >&raquo;</a></li>
           </ul>
         </Card>
         <Card

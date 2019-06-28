@@ -1,4 +1,5 @@
 import csvParse from 'csv-parse';
+import XLSX from 'xlsx';
 import adapter001 from './testcaseAdapter.js';
 import adapter002 from './bitbay-Historia-Szczegolowa.js';
 import adapter003 from './bitbay-Historia-Transakcje.js';
@@ -6,12 +7,16 @@ import adapter004 from './bitbay-Historia-Wplaty_Wyplaty.js';
 import adapter005 from './bitmarket24-historia_salda.js';
 import adapter006 from './bitmarket24-historia_transakcji.js';
 import adapter007 from './kraken-ledgers.js';
-import adapter008 from './poloniex-depositHistory-withdrawalHistory.js';
-import adapter009 from './poloniex-tradeHistory.js';
-import adapter010 from './kursy.js';
-import adapter011 from './bittrex-fullOrders';
-import adapter012 from './wavesplatform-transactions';
-// import adapter011 from './exAdapters/kraken-trades.js';
+import adapter008 from './poloniex.com-depositHistory.js';
+import adapter009 from './poloniex.com-withdrawalHistory.js';
+import adapter010 from './poloniex.com-tradeHistory.js';
+import adapter011 from './kursy.js';
+import adapter012 from './bittrex-fullOrders';
+import adapter013 from './wavesplatform-transactions';
+import adapter014 from './binance.com-TradeHistory.xlsx';
+// import adapter015 from './binance.com-DepositHistory.csv';
+// import adapter016 from './binance.com-WithdrawalHistory.csv';
+import adapter017 from './bitmarket.pl-export.xlsx';
 
 const plugins = [
     adapter001,
@@ -25,7 +30,12 @@ const plugins = [
     adapter009,
     adapter010,
     adapter011,
-    adapter012
+    adapter012,
+    adapter013,
+    adapter014,
+    // adapter015,
+    // adapter016,
+    adapter017
 ];
 
 function getPlugin(file) {
@@ -45,18 +55,35 @@ function getPlugin(file) {
     }
     return detectedTypes[0];
 }
-
+function loadXSLX(file, parseConfig, callback) {
+    function loadFileAsArrayBuffer(pe) {
+        const err = false;
+        const contentArrayBuffer = pe.currentTarget.result;
+        const workbook = XLSX.read(contentArrayBuffer, {
+            type: 'array'
+        });
+        const output = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]);
+        callback(err, output);
+    }
+    const fileReaderArrayBuffer = new FileReader();
+    fileReaderArrayBuffer.onload = loadFileAsArrayBuffer;
+    fileReaderArrayBuffer.readAsArrayBuffer(file);
+}
 function fileLoaderPromise(file) {
     return new Promise((resolve, reject) => {
-        function loadFile(e) {
+        function loadFileAsText(e) {
             const content = e.currentTarget.result;
+            let fileAdapter = false;
+
             const fileDescriptor = {
                 file: file,
                 basename: file.name,
                 filename: file.name,
+                fileExtension: String(file.name).split('.').pop().toLowerCase(),
                 content: content
             };
-            let fileAdapter = false;
+
+
             try {
                 fileAdapter = getPlugin(fileDescriptor);
             } catch (err) {
@@ -68,26 +95,41 @@ function fileLoaderPromise(file) {
                 throw fileAdapter;
                 // return;
             }
-            csvParse(content, fileAdapter.csvParseConfig, (err, output) => {
-                if (err) {
-                    console.error('ERROR', err);
-                    reject(err);
-                    return;
-                }
-                fileDescriptor.timezone = 'UTC+2h';
-                fileDescriptor.data = output;
-                fileDescriptor.type = (fileAdapter.getPluginname && fileAdapter.getPluginname()) || fileAdapter.pluginname;
-                fileDescriptor.fileAdapter = fileAdapter;
-                fileDescriptor.operations = fileAdapter.getOperations(fileDescriptor) || [];
-                resolve(fileDescriptor);
-            });
+            switch (fileDescriptor.fileExtension) {
+            case 'xlsx':
+                loadXSLX(file, fileAdapter.parseConfig, (err, output) => {
+                    if (err) {
+                        console.error('ERROR', err);
+                        reject(err);
+                        return;
+                    }
+                    fileDescriptor.data = output;
+                    fileDescriptor.type = (fileAdapter.getPluginname && fileAdapter.getPluginname()) || fileAdapter.pluginname;
+                    fileDescriptor.fileAdapter = fileAdapter;
+                    fileDescriptor.operations = fileAdapter.getOperations(fileDescriptor) || [];
+                    resolve(fileDescriptor);
+                });
+                break;
+            case 'csv':
+            default:
+                csvParse(content, fileAdapter.parseConfig, (err, output) => {
+                    if (err) {
+                        console.error('ERROR', err);
+                        reject(err);
+                        return;
+                    }
+                    fileDescriptor.data = output;
+                    fileDescriptor.type = (fileAdapter.getPluginname && fileAdapter.getPluginname()) || fileAdapter.pluginname;
+                    fileDescriptor.fileAdapter = fileAdapter;
+                    fileDescriptor.operations = fileAdapter.getOperations(fileDescriptor) || [];
+                    resolve(fileDescriptor);
+                });
+            }
         }
         const fileReader = new FileReader();
-        fileReader.onload = loadFile;
-
+        fileReader.onload = loadFileAsText;
         if (typeof file === 'string') {
             const request = new XMLHttpRequest();
-
             request.open('GET', file, true);
             request.responseType = 'blob';
             request.onload = function() {
@@ -103,7 +145,6 @@ function fileLoaderPromise(file) {
                 fileReader.readAsText(request.response);
             };
             request.send();
-            // fileReader.readAsDataURL(new File(file)).catch(console.error);
         } else {
             fileReader.readAsText(file);
         }

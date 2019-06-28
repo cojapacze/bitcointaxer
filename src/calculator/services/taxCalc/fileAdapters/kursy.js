@@ -1,5 +1,6 @@
 
-const csvParseConfig = {
+const parseConfig = {
+    type: 'csv',
     delimiter: ','
 };
 
@@ -37,7 +38,7 @@ function getOperations(file) {
 
 export default {
     pluginname: 'kursy',
-    csvParseConfig,
+    parseConfig,
     pluginfilename: __filename,
     match,
     getOperations

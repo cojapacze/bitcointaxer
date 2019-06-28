@@ -4,7 +4,8 @@
 const domain = 'kraken.com';
 const adapter = 'ledgers';
 
-const csvParseConfig = {
+const parseConfig = {
+    type: 'csv',
     delimiter: ','
 };
 
@@ -352,7 +353,7 @@ export default {
     pluginname: `${domain}-${adapter}`,
     pluginfilename: __filename,
     match,
-    csvParseConfig,
+    parseConfig,
     getOperations
 };
 

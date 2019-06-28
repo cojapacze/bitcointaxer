@@ -1,7 +1,8 @@
 const domain = 'bitbay.net';
 const adapter = 'Historia-Transakcje';
 
-const csvParseConfig = {
+const parseConfig = {
+    type: 'csv',
     delimiter: ';'
 };
 
@@ -89,6 +90,6 @@ export default {
     pluginname: `${domain}-${adapter}`,
     pluginfilename: __filename,
     match,
-    csvParseConfig,
+    parseConfig,
     getOperations
 };

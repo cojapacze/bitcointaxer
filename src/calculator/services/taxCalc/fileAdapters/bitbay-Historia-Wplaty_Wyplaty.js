@@ -1,7 +1,8 @@
 const domain = 'bitbay.net';
 const adapter = 'Historia-Wplaty_Wyplaty';
 
-const csvParseConfig = {
+const parseConfig = {
+    type: 'csv',
     delimiter: ';'
 };
 
@@ -88,6 +89,6 @@ export default {
     pluginname: `${domain}-${adapter}`,
     pluginfilename: __filename,
     match,
-    csvParseConfig,
+    parseConfig,
     getOperations
 };

@@ -2,7 +2,8 @@ import {getAssetConfig} from '../libs/Utils.js';
 let domain = 'testcase';
 const adapter = 'csv';
 
-const csvParseConfig = {
+const parseConfig = {
+    type: 'csv',
     delimiter: ',',
     relax_column_count: true
 };
@@ -113,6 +114,6 @@ export default {
     pluginname: `${domain}-${adapter}`,
     pluginfilename: __filename,
     match,
-    csvParseConfig,
+    parseConfig,
     getOperations
 };

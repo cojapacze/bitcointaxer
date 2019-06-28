@@ -4,7 +4,8 @@ const adapter = 'fullOrders';
 
 const location = 'wavesplatform.com';
 
-const csvParseConfig = {
+const parseConfig = {
+    type: 'csv',
     delimiter: ',',
     relax_column_count: true
 };
@@ -95,6 +96,6 @@ export default {
     pluginname: `${domain}-${adapter}`,
     pluginfilename: __filename,
     match,
-    csvParseConfig,
+    parseConfig,
     getOperations
 };

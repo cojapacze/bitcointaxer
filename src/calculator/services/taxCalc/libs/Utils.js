@@ -262,7 +262,12 @@ function comapreObjectsByFields(a, b, fields) {
     }
 
     for (i = 0; i < fields.length && !firstCompareResult; i += 1) {
-        firstCompareResult = compareByField(fields[i]); // a, b,
+        const field = fields[i];
+        if (typeof field === 'function') {
+            firstCompareResult = field(a, b);
+        } else {
+            firstCompareResult = compareByField(fields[i]); // a, b,
+        }
     }
     return firstCompareResult;
 }

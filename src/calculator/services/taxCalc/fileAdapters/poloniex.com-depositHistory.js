@@ -1,12 +1,13 @@
 const domain = 'poloniex.com';
-const adapter = 'depositHistory-or-withdrawalHistory';
+const adapter = 'depositHistory-or-old-withdrawalHistory';
 
-const csvParseConfig = {
+const parseConfig = {
+    type: 'csv',
     delimiter: ','
 };
 
 function match(file) {
-    //              0    1        2      3       4
+    //               0    1        2      3       4
     const pattern = 'Date,Currency,Amount,Address,Status';
     if (file.content.substr(0, pattern.length) === pattern) {
         return true;
@@ -19,10 +20,8 @@ function getOperations(file) {
     const data = file.data;
     let i = 0;
     let from, record, to;
-    let type = 'unknown';
-    if (file.basename.indexOf('depositHistory') !== -1) {
-        type = 'deposit';
-    }
+    let type = 'deposit';
+    // keep support for old version of withdrawalHistory
     if (file.basename.indexOf('withdrawalHistory') !== -1) {
         type = 'withdraw';
     }
@@ -84,7 +83,7 @@ export default {
     pluginname: `${domain}-${adapter}`,
     pluginfilename: __filename,
     match,
-    csvParseConfig,
+    parseConfig,
     getOperations
 };
 
