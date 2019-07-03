@@ -94,7 +94,6 @@ function orderDataTrades(data_trades) {
         pickPacket(pobranoFirst);
         pobranoFirst = pickFirst(data_trades, false, 'Pobranie środków z transakcji z rachunku');
     }
-    console.log('data_trades_ordered', data_trades_ordered);
     return data_trades_ordered;
 }
 function getOperations(file) {

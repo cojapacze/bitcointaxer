@@ -15,11 +15,10 @@ const exchangeInfo = JSON.parse(exchangeInfoJSON);
 /* eslint-enable */
 
 function match(file) {
-    /* eslint-disable */
-    const pattern = 'PK  o��N               docProps/core.xml��MK�0���!�v�-mQ�';
-    /* eslint-enable */
-    if (file.content.substr(0, pattern.length) === pattern) {
-        return true;
+    if (file.detectedFiletype === 'xlsx') {
+        if (JSON.stringify(Object.keys(file.data[0])) === '["Date(UTC)","Market","Type","Price","Amount","Total","Fee","Fee Coin"]') {
+            return true;
+        }
     }
     return false;
 }

@@ -3,6 +3,7 @@
 // https://support.kraken.com/hc/en-us/articles/360000678446-Digital-assets-and-cryptocurrencies-available-on-Kraken-and-their-currency-codes-
 const domain = 'kraken.com';
 const adapter = 'ledgers';
+const location = 'binance.com';
 
 const parseConfig = {
     type: 'csv',
@@ -230,7 +231,7 @@ function getOperations(file) {
             }
             break;
         case 'trade':
-            record.loc = 'kraken.com';
+            record.loc = location;
             data_trades.push(record);
             break;
         default:
@@ -245,7 +246,7 @@ function getOperations(file) {
             record.amount *= -1;
             record.transferType = 'withdraw';
             from = {
-                loc: 'kraken.com',
+                loc: location,
                 amount: record.amount,
                 currency: record.currency,
                 asset: record.currency
@@ -265,14 +266,13 @@ function getOperations(file) {
                 asset: record.currency
             };
             to = {
-                loc: 'kraken.com',
+                loc: location,
                 amount: record.amount,
                 currency: record.currency,
                 asset: record.currency
             };
         } else {
-            // console.log('Nieznany rekord', record);
-            throw new Error('Nieznany rekord');
+            console.error(domain, adapter, 'Unknown rekord', record);
         }
         operation = {
             sourcefile: record.file,
@@ -282,7 +282,7 @@ function getOperations(file) {
             timestamp: Date.parse(record.date) - 1000 * 60 * 10,
             recordRaw: record,
             type: record.transferType,
-            ex: 'kraken',
+            ex: domain,
             amount: record.amount,
             currency: record.currency,
             from: from,
@@ -296,26 +296,23 @@ function getOperations(file) {
         recordB = data_trades[i + 1];
         fee = false;
         if (!recordA || !recordB) {
-            console.error('Pozostał opuszczony rekord (bez spasowania)s', recordA, recordB);
+            console.error(domain, adapter, 'orphan records', recordA, recordB);
             continue;
         }
         if (recordA.refid !== recordB.refid) {
-            console.error('Blad spasowania rekordow', recordA, recordB);
-            // throw new Error('Blad spasowania rekordow', recordA, recordB);
+            console.error(domain, adapter, 'mismatched records', recordA, recordB);
             i -= 1;
             continue;
         }
-        // console.log('refid', recordA.refid, recordB.refid);
         // lookup for fee
         if (data_trades[i + 2]) {
             if (data_trades[i + 2].refid === recordA.refid) {
                 fee = data_trades[i + 2];
                 i += 1;
             } else {
-                console.debug('!no fee');
+                console.debug(domain, adapter, '!no fee');
             }    
         }
-        // console.log('ignore fee', recordA.currency, recordB.currency, fee);
         if (recordA.type === 'trade' && recordA.amount < 0 && recordB.type === 'trade' && recordB.amount > 0) {
             from = recordA;
             from.amount *= -1;
@@ -325,8 +322,7 @@ function getOperations(file) {
             from.amount *= -1;
             to = recordA;
         } else {
-            console.error('Blad spasowania transakcji', recordA, recordB);
-            throw new Error('Blad spasowania transakcji', recordA, recordB);
+            console.error(domain, adapter, 'mismatch in records', recordA, recordB);
         }
         operation = {
             sourcefile: from.file,
@@ -336,7 +332,7 @@ function getOperations(file) {
             date: from.date,
             timestamp: Date.parse(from.date) - 1000 * 60 * 10,
             type: 'trade',
-            ex: 'kraken',
+            ex: domain,
             fee: fee,
             from: from,
             to: to

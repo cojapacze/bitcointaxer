@@ -17,7 +17,6 @@ function match(file) {
 
 function rawCSVLineToRecord(rawCSVLine, lineNo) {
     const record = {};
-    // console.log(rawCSVLine, lineNo);
     record.rawCSVLine = rawCSVLine;
     record.rawCSVLineNo = lineNo;
     record.loc = 'bitmarket24.pl';
@@ -54,7 +53,6 @@ function getOperations(file) {
 
         operations.push(record);
     }
-    // console.log(operations);
     return operations;
 }
 
