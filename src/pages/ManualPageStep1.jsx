@@ -19,12 +19,12 @@ const CalculatorPageStep1 = () => (
               target="_blank"
               href="https://www.binance.com/pl/usercenter/history/user-trade"
             >&raquo;</a></li>
-            <li hidden>DepositHistory.csv <a
+            <li>DepositHistory.csv <a
               rel="noopener noreferrer"
               target="_blank"
               href="https://www.binance.com/pl/usercenter/wallet/money-log/deposit"
             >&raquo;</a></li>
-            <li hidden>WithdrawalHistory.csv <a
+            <li>WithdrawalHistory.csv <a
               rel="noopener noreferrer"
               target="_blank"
               href="https://www.binance.com/pl/usercenter/wallet/money-log/withdraw"
