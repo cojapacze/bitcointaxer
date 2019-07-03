@@ -89,10 +89,6 @@ class User extends Eventsmanager {
     }
     getDefaultCalculatorSetupDefault() {
         const taxResidence = this.getResidence();
-        let cryptoToCryptoTaxableFromValuationThreshold = 0;
-        if (taxResidence === 'pl-pln') {
-            cryptoToCryptoTaxableFromValuationThreshold = 2280;
-        }
         const defaultCalculatorSetup = {
             sourcefile: {
                 uid: 'test',
@@ -114,7 +110,7 @@ class User extends Eventsmanager {
                 longTermBuckets: [],
                 activityType: 'personal', // business
                 cryptoToCryptoTaxable: true,
-                cryptoToCryptoTaxableFromValuationThreshold: cryptoToCryptoTaxableFromValuationThreshold,
+                cryptoToCryptoTaxableFromValuationThreshold: 0,
                 // splitOperationIntoContracts: true,
                 // splitOperationIntoContractsUpToValue: 49,
                 valuationSetup: {
@@ -148,8 +144,19 @@ class User extends Eventsmanager {
     getResidence() {
         return this.residence;
     }
-    getDefaultCalculatorSetup() {
-        return this.defaultCalculatorSetup;
+    getDefaultCalculatorSetup(year) {
+        const setup = Object.assign({}, this.defaultCalculatorSetup.setup);
+        if (setup.taxResidence === 'pl-pln') {
+            setup.cryptoToCryptoTaxableFromValuationThreshold = 2280;
+            if (year > 2017) {
+                setup.cryptoToCryptoTaxableFromValuationThreshold = 6000;
+            }
+            if (year >= 2019) {
+                setup.activityType = 'business';
+                setup.cryptoToCryptoTaxable = false;
+            }
+        }
+        return setup;
     }
     getUserName() {
         return this.userName;

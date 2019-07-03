@@ -10,7 +10,6 @@ const crypto = require('crypto');
 // const extend = require('extend-shallow');
 
 class OperationQueue extends Eventsmanager {    
-    // defaultCalculatorSetup = undefined;
     lastModified = '';
     setModified(since) {
         if (since > this.lastModified || !this.lastModified) {
@@ -22,18 +21,6 @@ class OperationQueue extends Eventsmanager {
             this.recalculateOperations();
             this.lastModified = '';
         }
-    }
-    getDefaultCalculatorSetup(year) {
-        const setup = Object.assign({}, this.defaultCalculatorSetup.setup);
-        if (this.defaultCalculatorSetup.setup.cryptoToCryptoTaxableFromValuationThreshold && year > 2017) {
-            setup.cryptoToCryptoTaxableFromValuationThreshold = 6000;
-        }
-        if (year === 2018) {
-            setup.activityType = 'business';
-            setup.queueMethod = 'FIFO';
-            setup.cryptoToCryptoTaxableFromValuationThreshold = 0;
-        }
-        return setup;
     }
     config = {
         'ignore-duplicates-from-different-sources': false
@@ -100,7 +87,6 @@ class OperationQueue extends Eventsmanager {
             throw new Error('user is not instanceof User', config.user);
         }
         this.user = config.user;
-        this.defaultCalculatorSetup = this.user.getDefaultCalculatorSetup();
 
         if (!(config.prices instanceof Prices)) {
             throw new Error('prices is not instanceof Prices', config.prices);
@@ -390,7 +376,7 @@ class OperationQueue extends Eventsmanager {
             calculator = new Calculator({
                 year: year,
                 prevCalculator: prevCalculator,
-                setup: this.getDefaultCalculatorSetup(year),
+                setup: this.user.getDefaultCalculatorSetup(year),
                 prices: this.prices,
                 console: this.console,
                 operationQueue: this
