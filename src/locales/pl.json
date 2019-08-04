@@ -9,40 +9,7 @@
   "StartPage.tagline-light":  "Bezpieczny, anonimowy i bezpłatny",
   "StartPage.startButton": "Dalej",
 
-  "ManualPageStep1.help": "pomoc",
-  "ManualPageStep1.title": "Jak wczytać hitorię transakcji do kalkulatora?",
-  "ManualPageStep1.lead": "Do obliczenia dochodu w handlu kryptowalutami, będziesz potrzebował pobrać historie transakcji z giełd.",
-  "ManualPageStep1.body": "Zaloguj się do każdej z giełd na której dokonywałeś transakcji i pobierz do wspólnego <b>katalogu</b> pliki CSV.",
-  "ManualPageStep1.source": "katalogu",
-  "ManualPageStep1.export": "Wyeksportuj do wspólnego <b>katalogu</b> plik:",
-  "ManualPageStep1.downloadAndExtract": "Pobierz plik {filename} i wypakuj do wspólnego <b>katalogu</b> plik:",
-  "ManualPageStep1.downloadFiles": "Pobierz do wspólnego <b>katalogu</b> pliki:",
-  "ManualPageStep1.save": "Skopiuj do wspólnego <b>katalogu</b> pliki:",
-  "ManualPageStep1.goToEveryQuarter": "Wybierz historia Szczegółowa i pobierz do wspólnego <b>katalogu</b> pliki np. co kwartał",
-  "ManualPageStep1.genericFormat": "format generyczny",
-  "ManualPageStep1.custom": "Użyj prostego formatu danych, aby dodać inne operacje np. P2P lub przekonwertuj historę z pozostałych giełd:",
-  "ManualPageStep1.footer": "Zalecane jest, aby przechowywać wyeksportowane pliki w bezpiecznym miejscu.",
-
-  "ManualPageStep2.title": "Ustawienia kalkulatora",
-
-  "ManualPageStep2.queue": "Kalkulator do każdej operacji przyporządkowuje koszt nabycia użytych monet, wg następujących metod:",
-  "ManualPageStep2.queue.fifo": "<strong>FIFO</strong> - koszty przyporządkowywane są chronologicznie - pierwsze weszło, pierwsze wyszło",
-  "ManualPageStep2.queue.lifo": "<strong>LIFO</strong> - koszty przyporządkowywane są chronologicznie - ostatnie weszło, pierwsze wyszło",
-  "ManualPageStep2.queue.hifo": "<strong>HIFO</strong> - koszty przyporządkowywane są wg cen nabycia - w pierwszej kolejności zbywane są najdrożej nabyte monety",
-
-  "ManualPageStep2.mode": "Kalkulator może pracować w dwóch trybach",
-  "ManualPageStep2.mode.oneQueue": "<strong>wspólna kolejka</strong> - kolejka kosztów jest wspólna dla wszystkich lokalizacji (giełd)",
-  "ManualPageStep2.mode.trackLocations": "<strong>uwzględniaj położenie i stan magazynowy</strong> - dla każdej lokalizacji powadzona jest osobna kolejka kosztów, transfery mają wpływ na lokalizacje kosztów",
-
-  "ManualPageStep2.ctc": "Zamiany krypto-na-krypto",
-  "ManualPageStep2.ctc.desc": "Kalkulator może traktować zamiany kryptowalut jako zdarzenia podatkowe lub nie.",
-  "ManualPageStep2.ctc.off": "<strong>wyłączone</strong> przy zamianie jednej kryptowaluty na drugą, przepisywany jest koszt nabycia kryptowaluty zbywanej jako koszt nabycia kryptowaluty nabywanej.",
-  "ManualPageStep2.ctc.on": "<strong>włączone</strong> wyceniany jest hipotetyczny przychód wg szacowanej wartości do waluty rezydencji (np. złotówki) na dzień zamiany.",
-  "ManualPageStep2.ctc.on.threshold": "<strong>opcja zwolnienia</strong> wg art. 21 ust. 1 pkt 32b ustawy o podatku dochodowym wolne od podatku dochodowego są przychody z zamiany rzeczy lub praw, jeżeli z tytułu jednej umowy nie przekraczają kwoty 6000zł lub 2280zł przed rokiem 2018.",
-
-  "ManualPageStep3.title": "Wszystko gotowe?",
-  "ManualPageStep3.body": "Po uruchomienu kalkulatora zamknij plik testowy demonstrujący działanie kalkulatora (x przy nazwie), następnie otwórz przygotowane przez siebie pliki z <b>katalogu</b>.",
-  "ManualPageStep3.footer": "<strong>Uwaga:</strong><br/> Narzędzie ma za zadanie ułatwić obliczenie osiągniętego dochodu w handlu kryptowalutami oraz pomóc w zarządzaniu swoim kryptowalutowym protfolio. Autor nie ponosi odpowiedzialności za działanie aplikacji, która może zawierać błędy lub nie spełniać innych wymogów - <strong>używasz jej na własną odpowiedzialność</strong>. Otrzymany wynik należy skonsultować z doradcą podatkowym.",
+  "ManualPage.exchangeHelp": "pomoc",
 
   "MainCalculator.displayMessages": "Wyświetlaj komunikaty",
   "MainCalculator.displayErrors": "Wyświetlaj błedy",
