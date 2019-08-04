@@ -94,16 +94,16 @@ class ManualPage extends React.Component {
           }}
         />
         <Steps.Step
-          title={<FormattedMessage id="ManualPage.step2" defaultMessage="Setup calculator" />}
-          description={<FormattedMessage id="ManualPage.step2.description" defaultMessage="How settings works?" />}
+          title={<FormattedMessage id="ManualPage.step2" defaultMessage="The calculation settings" />}
+          description={<FormattedMessage id="ManualPage.step2.description" defaultMessage="How the settings works?" />}
           style={{cursor: 'pointer'}}
           onClick={() => {
             history.push(this.steps[1]);
           }}
         />
         <Steps.Step
-          title={<FormattedMessage id="ManualPage.step3" defaultMessage="Download report" />}
-          description={<FormattedMessage id="ManualPage.step3.description" defaultMessage="All done!" />}
+          title={<FormattedMessage id="ManualPage.step3" defaultMessage="Ready to proceed?" />}
+          description={<FormattedMessage id="ManualPage.step3.description" defaultMessage="Run calculator!" />}
           style={{cursor: 'pointer'}}
           onClick={() => {
             history.push(this.steps[2]);
