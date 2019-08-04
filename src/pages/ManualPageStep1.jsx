@@ -1,18 +1,31 @@
 import React from 'react';
+import {FormattedMessage, FormattedHTMLMessage} from 'react-intl';
 import {Card} from 'antd';
 
 const CalculatorPageStep1 = () => (
   <div>
     <div className="steps-content">
-      <h2>Jak wczytać hitorię transakcji do kalkulatora?</h2>
-      <p>Do obliczenia dochodu w handlu kryptowalutami, będziesz potrzebował pobrać historie transakcji z giełd.</p>
-      <p>Zaloguj się do każdej z giełd na której dokonywałeś transakcji i pobierz do wspólnego <b>katalogu</b> pliki CSV.</p>
+      <h2><FormattedMessage
+        id="ManualPageStep1.title"
+        defaultMessage="How to upload transaction history to the calculator?"
+      /></h2>
+      <p><FormattedMessage
+        id="ManualPageStep1.lead"
+        defaultMessage="To calculate the income from cryptocurrency trading, you will need to download the transaction history from cryptocurrency markets."
+      /></p>
+      <p><FormattedHTMLMessage
+        id="ManualPageStep1.body"
+        defaultMessage="Log in to every market you have been trading on and download the CSV files. Put them all into a single <b>catalog</b>."
+      /></p>
       <div className="manual-exchanges">
         <Card
           className="manual-exchange-card"
           title="binance.com"
         >
-          <p>Wyeksportuj do wspólnego <b>katalogu</b> plik:</p>
+          <p><FormattedHTMLMessage
+            id="ManualPageStep1.export"
+            defaultMessage="Export the files into a common <b>catalog</b>:"
+          /></p>
           <ul>
             <li>TradeHistory.xlsx <a
               rel="noopener noreferrer"
@@ -38,9 +51,18 @@ const CalculatorPageStep1 = () => (
             rel="noopener noreferrer"
             target="_blank"
             href="https://support.kraken.com/hc/en-us/articles/208267878-How-to-export-your-account-history"
-          >pomoc</a>}
+          ><FormattedMessage
+              id="ManualPageStep1.help"
+              defaultMessage="help"
+            /></a>}
         >
-          <p>Pobierz plik ledgers.zip i wypakuj do wspólnego <b>katalogu</b> plik:</p>
+          <p><FormattedHTMLMessage
+            id="ManualPageStep1.downloadAndExtract"
+            defaultMessage="Download the file {filename} and save in the designated <b>catalog</b>."
+            values={{
+              filename: 'ledgers.zip'
+            }}
+          /></p>
           <ul>
             <li>ledgers.csv</li>
           </ul>
@@ -54,7 +76,10 @@ const CalculatorPageStep1 = () => (
           //   href="https://www.poloniex.com/support/"
           // >pomoc</a>}
         >
-          <p>Pobierz do wspólnego <b>katalogu</b> pliki:</p>
+          <p><FormattedHTMLMessage
+            id="ManualPageStep1.save"
+            defaultMessage="Save remaining files into the same, designated <b>catalog</b>:"
+          /></p>
           <ul>
             <li>tradeHistory.csv <a
               rel="noopener noreferrer"
@@ -81,9 +106,15 @@ const CalculatorPageStep1 = () => (
             rel="noopener noreferrer"
             target="_blank"
             href="https://bittrex.zendesk.com/hc/en-us/articles/360001359006-Where-s-my-Order-History-"
-          >pomoc</a>}
+          ><FormattedMessage
+              id="ManualPageStep1.help"
+              defaultMessage="help"
+            /></a>}
         >
-          <p>Pobierz do wspólnego <b>katalogu</b> pliki:</p>
+          <p><FormattedHTMLMessage
+            id="ManualPageStep1.save"
+            defaultMessage="Save remaining files into the same, designated <b>catalog</b>:"
+          /></p>
           <ul>
             <li>BittrexOrderHistory_2017.csv</li>
             <li>...</li>
@@ -96,9 +127,15 @@ const CalculatorPageStep1 = () => (
             rel="noopener noreferrer"
             target="_blank"
             href="https://bitbay.net/pl/pomoc/moje-konto/jak-pobrac-historie-konta-do-pliku"
-          >pomoc</a>}
+          ><FormattedMessage
+              id="ManualPageStep1.help"
+              defaultMessage="help"
+            /></a>}
         >
-          Wybierz historia Szczegółowa i pobierz do wspólnego <b>katalogu</b> pliki np. co kwartał
+          <div><FormattedHTMLMessage
+            id="ManualPageStep1.goToEveryQuarter"
+            defaultMessage="Go to ‘Szczegółowa’ history and download to the <b>catalog</b> all the files e.g. every quarter."
+          /></div>
           <ul>
             <li>bitbay.net-HistoriaSzczegolowa-2018-01-01_2018-03-31.csv</li>
             <li>bitbay.net-HistoriaSzczegolowa-2018-04-01_2018-06-30.csv</li>
@@ -112,7 +149,10 @@ const CalculatorPageStep1 = () => (
           className="manual-exchange-card"
           title="bitmarket.pl"
         >
-          <p>Wyeksportuj do wspólnego <b>katalogu</b> plik:</p>
+          <FormattedHTMLMessage
+            id="ManualPageStep1.save"
+            defaultMessage="Save remaining files into the same, designated <b>catalog</b>:"
+          />
           <ul>
             <li>BITMARKET export.xlsx <a
               rel="noopener noreferrer"
@@ -128,9 +168,15 @@ const CalculatorPageStep1 = () => (
             rel="noopener noreferrer"
             target="_blank"
             href="https://bitmarket24.pl/kontakt.html"
-          >pomoc</a>}
+          ><FormattedMessage
+              id="ManualPageStep1.help"
+              defaultMessage="help"
+            /></a>}
         >
-          Skopiuj do wspólnego <b>katalogu</b> pliki:
+          <FormattedHTMLMessage
+            id="ManualPageStep1.save"
+            defaultMessage="Save remaining files into the same, designated <b>catalog</b>:"
+          />
           <ul>
             <li>historia_salda.csv</li>
             <li>historia_transakcji.csv</li>
@@ -140,7 +186,10 @@ const CalculatorPageStep1 = () => (
           className="manual-exchange-card"
           title="wavesplatform.com"
         >
-          <p>Wyeksportuj do wspólnego <b>katalogu</b> plik:</p>
+          <FormattedHTMLMessage
+            id="ManualPageStep1.export"
+            defaultMessage="Export the files into a common <b>catalog</b>:"
+          />
           <ul>
             <li>transactions.csv <a
               rel="noopener noreferrer"
@@ -151,9 +200,15 @@ const CalculatorPageStep1 = () => (
         </Card>
         <Card
           className="manual-exchange-card"
-          title="format generyczny"
+          title={<FormattedHTMLMessage
+            id="ManualPageStep1.genericFormat"
+            defaultMessage="generic format"
+          />}
         >
-          Użyj prostego formatu danych, aby dodać inne operacje np. P2P lub przekonwertuj historę z pozostałych giełd:
+          <FormattedHTMLMessage
+            id="ManualPageStep1.custom"
+            defaultMessage="Use simple data format, to add other operations e.g. P2P or covert the history from other cryptocurrency markets accordingly."
+          />
           <code style={{marginTop: '16px'}} className="raw code csv">{`date,from address,amount,asset,to address,amount,asset,txid
 2017-03-17 12:02:23,MyBank,100,USD,Kraken.com,100,USD,deposit
 2017-03-18 12:04:45,Kraken.com,100,USD,Kraken.com,0.082716212,BTC
@@ -163,7 +218,10 @@ const CalculatorPageStep1 = () => (
         </Card>
       </div>
       <div style={{height: '64px'}}></div>
-      <p style={{textAlign: 'right'}}><strong>Zalecane jest, aby przechowywać wyeksportowane pliki w bezpiecznym miejscu.</strong></p>
+      <p style={{textAlign: 'right'}}><strong><FormattedHTMLMessage
+        id="ManualPageStep1.footer"
+        defaultMessage="Keep all files in the same, designated catalog."
+      /></strong></p>
       <div style={{height: '32px'}}></div>
     </div>
   </div>
