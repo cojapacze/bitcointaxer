@@ -18,7 +18,7 @@
     "chalk": "^2.4.2",
     "circular-json": "^0.5.9",
     "csv-generate": "^3.2.3",
-    "csv-parse": "^2.5.0",
+    "csv-parse": "^4.6.5",
     "export-to-csv": "^0.2.1",
     "extend-shallow": "^3.0.2",
     "flatted": "^0.2.3",
