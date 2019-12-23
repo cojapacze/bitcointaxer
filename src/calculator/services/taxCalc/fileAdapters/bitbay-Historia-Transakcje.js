@@ -10,10 +10,14 @@ function match(file) {
     //                            0             1      2       3      4                          5                             6
     const pattern = String('\ufeffRynek;Data operacji;Rodzaj;Typ;Kurs;Ilość;Wartość;');
     const pattern2 = String('Rynek;Data operacji;Rodzaj;Typ;Kurs;Ilość;Wartość;');
+    const pattern3 = String('"Rynek";"Data operacji";"Rodzaj";"Typ";"Kurs";"Ilość";"Wartość";');
     if (file.content.substr(0, pattern.length) === pattern) {
         return true;
     }
     if (file.content.substr(0, pattern2.length) === pattern2) {
+        return true;
+    }
+    if (file.content.substr(0, pattern3.length) === pattern3) {
         return true;
     }
     return false;
