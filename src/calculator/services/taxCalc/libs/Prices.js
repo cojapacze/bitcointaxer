@@ -682,6 +682,15 @@ class Prices extends Eventsmanager {
         } else {
             operationValuation.valuationCTCDiscount = false;
         }
+        if (operationValuation.defaultCustomValue) {
+            operationValuation.modified = true;
+            operationValuation.useQuoteAssetValue = false;
+            operationValuation.useBaseAssetValue = false;
+            operationValuation.valuationCTCDiscount = 0;
+            operationValuation.custom = operationValuation.defaultCustomValue;
+            operationValuation.value = operationValuation.defaultCustomValue;
+        }
+
         // calculate
         this.recalculateOperationValuation(operationValuation);
     }
@@ -906,11 +915,31 @@ class Prices extends Eventsmanager {
                     resolved: true,
                     loading: false
                 });
+                const resolvePromise = () => {
+                    this.setOperationValuationDefaults(operationValuation);
+                    resolve(operationValuation);
+                };
+                if (operationValuation.operation.valuationFromExchange) {
+                    if (operationValuation.operation.valuationFromExchange.currency === targetAsset) {
+                        operationValuation.defaultCustomValue = operationValuation.operation.valuationFromExchange.value;
+                        resolvePromise();
+                    } else {
+                        const priceEnquire = this.getSimpleExchangePrice(
+                            operation.date, operationValuation.operation.valuationFromExchange.currency, targetAsset);
+                        priceEnquire.promise.then(priceResult => {
+                            const localExchangeRate = this.recalculateSidePrice(priceResult);
+                            operationValuation.defaultCustomValue = operationValuation.operation.valuationFromExchange.value * localExchangeRate;
+                            resolvePromise();
+                        }, error => {
+                            console.error('error resolving price for defaultCustomValue', error, operationValuation.operation.valuationFromExchange, operationValuation.operation);
+                            resolvePromise();
+                        });
+                    }
+                } else {
+                    resolvePromise();
+                }
                 // apply default config for resolved valuation
-                this.setOperationValuationDefaults(operationValuation);
-
-                resolve(operationValuation);
-            });    
+            });
         });
         // cache unresolved valuation to reuse instead of creating new one
         this.cacheOperationValuation(valuationKey, operationValuation);

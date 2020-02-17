@@ -20,6 +20,22 @@ const CalculatorPageStep1 = () => (
       <div className="manual-exchanges">
         <Card
           className="manual-exchange-card"
+          title="coinbase.com"
+        >
+          <p><FormattedHTMLMessage
+            id="ManualPageStep1.coinbaseExport"
+            defaultMessage="Set correct <a target='_blank' href='https://www.coinbase.com/settings/preferences'>local currency</a> and download the file into a common <b>catalog</b>:"
+          /></p>
+          <ul>
+            <li>Coinbase-TaxTransactionsReport.csv <a
+              rel="noopener noreferrer"
+              target="_blank"
+              href="https://www.coinbase.com/reports"
+            >&raquo;</a></li>
+          </ul>
+        </Card>
+        <Card
+          className="manual-exchange-card"
           title="binance.com"
         >
           <p><FormattedHTMLMessage

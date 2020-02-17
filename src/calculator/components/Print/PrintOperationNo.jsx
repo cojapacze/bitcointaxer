@@ -28,7 +28,7 @@ class PrintOperationNo extends React.Component {
   }
   render() {
     const {operation, colors, blink} = this.state;
-    if (!operation.calculator || !operation.calculatorStep) {
+    if (!operation || !operation.calculator || !operation.calculatorStep) {
       return 'err';
     }
     let className = `print-operation-key ${colors}`;

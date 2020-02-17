@@ -14,7 +14,7 @@ const CONFIG = {
         stocktaking: true,
         priceTable: true,
         trackCoins: false,
-        demoSeal: true,
+        demoSeal: false,
         splitIntoContracts: false,
         stocktakingNOW: true,
         dummy: 'foo'
@@ -35,8 +35,8 @@ const assetsConfig = {
         iso: 'LTC',
         addressFilter: /[LM3][a-km-zA-HJ-NP-Z1-9]{26,33}/,
         blockchain: 'Litecoin blockchain',
-        blockchainAddressPrelink: 'https://bchain.info/LTC/addr/',
-        blockchainTxPrelink: 'https://bchain.info/LTC/tx/',
+        blockchainAddressPrelink: 'http://explorer.litecoin.net/address/',
+        blockchainTxPrelink: 'http://explorer.litecoin.net/tx/',
         priceHistoryAdapter: ['coinmarketcap'],
         decimalPlaces: 8
     },

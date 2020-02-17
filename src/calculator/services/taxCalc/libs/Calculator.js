@@ -1086,7 +1086,7 @@ class Calculator extends Eventsmanager {
     trade(operation) {
         // early bird error control - shold never happen
         if (operation.from.asset === operation.to.asset) {
-            console.error('LOGIC ERROR - this same assets in trade operation');
+            console.error('LOGIC ERROR - this same assets in trade operation', operation);
             throw new Error('LOGIC ERROR - this same assets in trade operation');
         }
         return this.atomic(operation, 'trade');

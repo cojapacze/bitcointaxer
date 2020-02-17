@@ -23,7 +23,7 @@ import 'antd/dist/antd.css';
 import 'ant-design-pro/dist/ant-design-pro.css';
 import './styles/custom.css';
 
-import {LocaleProvider} from 'antd';
+import {ConfigProvider} from 'antd';
 import {addLocaleData, IntlProvider} from 'react-intl';
 
 import plAntd from 'antd/lib/locale-provider/pl_PL';
@@ -102,11 +102,11 @@ class Root extends React.Component {
       </div>;
 
     return (
-      <LocaleProvider locale={translation.antd}>
+      <ConfigProvider locale={translation.antd}>
         <IntlProvider locale={translation.locale} messages={translation.messages}>
           {result}
         </IntlProvider>
-      </LocaleProvider>
+      </ConfigProvider>
     );
   }
 }
