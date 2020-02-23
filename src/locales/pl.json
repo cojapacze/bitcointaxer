@@ -87,6 +87,9 @@
   "EditSetupCalculator.activityType.personal": "Osoba fizyczna",
   "EditSetupCalculator.activityType.business": "Działalność gospodarcza",
 
+  "EditSetupCalculator.activityType.personal_pl_2019": "Klasyczny",
+  "EditSetupCalculator.activityType.business_pl_2019": "Nowe przepisy PL od 2019",
+
   "EditSetupCalculator.queueMethod": "Metoda przyporządkowania kosztu do przychodu",
   "EditSetupCalculator.queueMethod.required": "Wybierz metodę przyporządkowania kosztu",
   "EditSetupCalculator.queueMethod.FIFO": "FIFO",

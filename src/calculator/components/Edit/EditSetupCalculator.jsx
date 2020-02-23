@@ -19,12 +19,32 @@ class EditSetupCalculator extends React.Component {
     const {calculator} = this.state;
     const setup = calculator.getSetup();
     const {getFieldDecorator} = this.props.form;
+    let classicMethodCaption = <FormattedMessage
+      id="EditSetupCalculator.activityType.personal"
+      defaultMessage="Personal"
+    />;
+    let modernMethodCaption = <FormattedMessage
+      id="EditSetupCalculator.activityType.business"
+      defaultMessage="Business"
+    />;
     const formItemLayout = {
       labelCol: {span: 8},
       wrapperCol: {span: 14}
     };
     if (!setup) {
       return '<div>no calculator setup (calculator)</div>';
+    }
+
+    // country specific setup
+    if (calculator.year >= 2019 && setup.taxResidence === 'pl-pln') {
+      classicMethodCaption = <FormattedMessage
+        id="EditSetupCalculator.activityType.personal_pl_2019"
+        defaultMessage="Classic"
+      />;
+      modernMethodCaption = <FormattedMessage
+        id="EditSetupCalculator.activityType.business_pl_2019"
+        defaultMessage="Modern"
+      />;
     }
 
     const options = [];
@@ -50,14 +70,8 @@ class EditSetupCalculator extends React.Component {
           buttonStyle="solid"
           onChange={e => calculator.setActivityType(e.target.value)}
         >
-          <Radio.Button value='personal'><FormattedMessage
-            id="EditSetupCalculator.activityType.personal"
-            defaultMessage="Personal"
-          /></Radio.Button>
-          <Radio.Button value='business'><FormattedMessage
-            id="EditSetupCalculator.activityType.business"
-            defaultMessage="Business"
-          /></Radio.Button>
+          <Radio.Button value='personal'>{classicMethodCaption}</Radio.Button>
+          <Radio.Button value='business'>{modernMethodCaption}</Radio.Button>
         </Radio.Group>
       )}
     </Form.Item>);
