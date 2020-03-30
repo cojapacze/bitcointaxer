@@ -11,6 +11,8 @@ import Footer from './components/Footer';
 import StartPage from './pages/StartPage';
 import CalculatorPage from './pages/CalculatorPage';
 import ManualPage from './pages/ManualPage';
+import HowToFilePage from './pages/HowToFilePage';
+import FindTaxAdvisorPage from './pages/FindTaxAdvisorPage';
 
 // import FaqPage from './pages/FaqPage';
 // import Page from './pages/Page';
@@ -36,14 +38,14 @@ import enMessages from './locales/en.json';
 
 const translations = [
   {
-    name: 'English (dev)',
+    name: 'English (global) ',
     locale: 'en',
     messages: enMessages,
     antd: enAntd,
     data: enAppLocaleData
   },
   {
-    name: 'Polski',
+    name: 'Polski (PL)',
     locale: 'pl',
     messages: plMessages,
     antd: plAntd,
@@ -83,8 +85,8 @@ class Root extends React.Component {
                     <Route exact path="/" component={StartPage} />
                     <Route path="/introduction/:step" component={ManualPage} />
                     <Route path="/calculator" component={CalculatorPage} />
-                    {/* <Route path="/home" component={HomePage} /> */}
-                    {/* <Route path="/calculator" component={CalculatorPage} /> */}
+                    <Route path="/how-to-file" component={HowToFilePage} />
+                    <Route path="/find-tax-advisor" component={FindTaxAdvisorPage} />
                     {/* <Route path="/faq" component={FaqPage} /> */}
                     {/* <Route path="/pages/:id" component={Page} /> */}
                     {/* <Route path="*" component={HomePage} /> */}

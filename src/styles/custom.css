@@ -253,3 +253,23 @@ input::-webkit-inner-spin-button { margin-left: 4px; }
 .operation-no {
 	color: #ad6800;
 }
+
+.image-preview {
+	border-radius: 3px;
+	border: 1px solid #eee;
+}
+.target-button {
+	white-space: nowrap;
+}
+.target-button.calculator {
+	font-family: 'Courier New', Courier, monospace;
+	background: #eee;
+	border-radius: 3px;
+	padding: 2px;
+}
+.pl-red {
+	color: red;
+}
+.instructions q {
+	display: block;
+}

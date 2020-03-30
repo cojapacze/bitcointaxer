@@ -12,7 +12,7 @@ const links = [{
   blankTarget: true
 }];
 
-const copyright = <div>Copyright <Icon type="copyright" /> 2017-2019 timescraper.com</div>;
+const copyright = <div>Copyright <Icon type="copyright" /> 2017-2020 timescraper.com</div>;
 
 const Footer = props => {
   const {translations, onLocaleChange, currentLocale} = props;

@@ -23,7 +23,7 @@ const CONFIG = {
         fixupResidenceCurrencyCostBasis: true,
         showFine: false
     },
-    testcaseFile: '/tests/testcase_03.csv',
+    testcaseFile: '/tests/testcase_10.csv',
     priceServerAddress: 'https://priceserver.bitcointaxer.org:8088'
 };
 const assetsConfig = {

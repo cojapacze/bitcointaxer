@@ -4,10 +4,17 @@
   "Header.calculator": "Kalkulator dochodu",
   "Header.default": "Anonimowy",
   "Header.manual": "Instrukcja obsługi",
+  "Header.howtofile": "Jak rozliczyć Twój e-PIT?",
+  "Header.findtaxadvisor": "Znajdź doradcę",
   "StartPage.title": "Kalulator dochodu",
   "StartPage.tagline": "Wartość rynkowa - Koszt nabycia = Dochód/Strata",
   "StartPage.tagline-light":  "Bezpieczny, anonimowy i bezpłatny",
-  "StartPage.startButton": "Dalej",
+  "StartPage.startButton": "Instrukcja obsługi kalkulatora",
+
+  "ManualIncomeTax.findTaxAdvisor": "Znajdź doradcę",
+  "FindTaxAdvisor.title": "Znajdź doradcę / księgowego",
+  "FindTaxAdvisor.tagline": "Szukaj lokalnego doradcy:",
+  "FindTaxAdvisor.search.placeholder": "wpisz miasto",
 
   "ManualPageStep1.help": "pomoc",
   "ManualPageStep1.title": "Jak wczytać hitorię transakcji do kalkulatora?",

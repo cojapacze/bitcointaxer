@@ -83,7 +83,9 @@ class User extends Eventsmanager {
         return 'btc';
     }
     getLocaleLanguageDefault() {
-        const lang = (navigator.language || navigator.browserLanguage).toLowerCase();
+        const urlParams = new URLSearchParams(window.location.search);
+        const languageParam = urlParams.get('language');
+        const lang = (languageParam || navigator.language || navigator.browserLanguage).toLowerCase();
         const ln = lang.substr(0, 2);
         return ln;
     }

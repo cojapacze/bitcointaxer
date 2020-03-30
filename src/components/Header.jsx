@@ -21,6 +21,12 @@ function Header(props) {
   if (matchPath(location.pathname, {path: '/calculator', exact: false, strict: false})) {
     currentLocations.push('calculator');
   }
+  if (matchPath(location.pathname, {path: '/how-to-file', exact: false, strict: false})) {
+    currentLocations.push('how-to-file');
+  }
+  if (matchPath(location.pathname, {path: '/find-tax-advisor', exact: false, strict: false})) {
+    currentLocations.push('find-tax-advisor');
+  }
 
   return (
     <Layout.Header className="header">
@@ -50,6 +56,16 @@ function Header(props) {
           id="Header.calculator"
           defaultMessage="Calculator"
           description="topmenu: calculator"
+        /></NavLink></Menu.Item>
+        <Menu.Item key="how-to-file"><NavLink className="nav-link-off" to="/how-to-file"><FormattedMessage
+          id="Header.howtofile"
+          defaultMessage="How to file?"
+          description="topmenu: how to file"
+        /></NavLink></Menu.Item>
+        <Menu.Item key="find-tax-advisor"><NavLink className="nav-link-off" to="/find-tax-advisor"><FormattedMessage
+          id="Header.findtaxadvisor"
+          defaultMessage="Find Tax Advisor"
+          description="topmenu: find tax advisor"
         /></NavLink></Menu.Item>
       </Menu>
       <div style={{position: 'absolute', top: '0px', right: '24px', color: 'white'}}>
