@@ -670,11 +670,19 @@ class TableStocktaking extends React.Component {
     }
     return (
       <Table
+        style={{
+          transform: 'scale(0.50)',
+          width: '200%',
+          left: '-50%',
+          position: 'relative'
+        }}
         defaultExpandedRowKeys={expandedRows}
         onExpandedRowsChange={newExpandedRows => {
           expandedRows = newExpandedRows;
         }}
-        title={() => <span>
+        title={() => <span style={{
+          fontSize: '150%'
+        }}>
           <FontAwesomeIcon icon={faPiggyBank} style={{marginRight: '4px'}} />
           <FormattedMessage
             id="TableStocktaking.title"

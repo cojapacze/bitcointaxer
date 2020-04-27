@@ -24,6 +24,7 @@
   "ManualPageStep1.export": "Wyeksportuj do wspólnego <b>katalogu</b> plik:",
   "ManualPageStep1.downloadAndExtract": "Pobierz plik {filename} i wypakuj do wspólnego <b>katalogu</b> plik:",
   "ManualPageStep1.coinbaseExport": "Ustaw poprawną <a target='_blank' href='https://www.coinbase.com/settings/preferences'>walutę rachunku</a> (EUR dla Polski), wygeneruj i pobierz nowy raport do <b>katalogu</b>:",
+  "ManualPageStep1.proCoinbaseExport": "Pobierz raport 'Account' jako CSV do wspólnego <b>katalogu</b>:",
   "ManualPageStep1.downloadFiles": "Pobierz do wspólnego <b>katalogu</b> pliki:",
   "ManualPageStep1.save": "Skopiuj do wspólnego <b>katalogu</b> pliki:",
   "ManualPageStep1.goToEveryQuarter": "Wybierz historia Szczegółowa i pobierz do wspólnego <b>katalogu</b> pliki np. co kwartał",
@@ -265,7 +266,7 @@
   "TableInventory.costBasis": "Koszt nabycia",
   "TableInventory.footer": "Łączną wartość wg cen nabycia: {valuation}",
 
-  "TableStocktaking.title": "Inwentaryzajca na dzień {date}",
+  "TableStocktaking.title": "Inwentaryzacja na dzień {date}",
   "TableStocktaking.asset": "Kapitał",
   "TableStocktaking.no": "Lp.",
   "TableStocktaking.index": "Indeks",

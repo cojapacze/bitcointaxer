@@ -20,6 +20,22 @@ const CalculatorPageStep1 = () => (
       <div className="manual-exchanges">
         <Card
           className="manual-exchange-card"
+          title="pro.coinbase.com"
+        >
+          <p><FormattedHTMLMessage
+            id="ManualPageStep1.proCoinbaseExport"
+            defaultMessage="Download the 'Account' statement as CSV into a common <b>catalog</b>:"
+          /></p>
+          <ul>
+            <li>account.csv <a
+              rel="noopener noreferrer"
+              target="_blank"
+              href="https://pro.coinbase.com/profile/statements"
+            >&raquo;</a></li>
+          </ul>
+        </Card>
+        <Card
+          className="manual-exchange-card"
           title="coinbase.com"
         >
           <p><FormattedHTMLMessage

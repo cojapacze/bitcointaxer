@@ -149,7 +149,7 @@ class TableBalancesBasic extends React.Component {
       </div>,
       dataIndex: 'amount',
       key: 'amount',
-      width: '150px',
+      width: '300px',
       render: (text, record) => {
         let result = '';
         const expanded = expandedRows.includes(record.key);
@@ -183,21 +183,22 @@ class TableBalancesBasic extends React.Component {
       }
     }];
     return (
-      <div>
-        <Table
-          defaultExpandedRowKeys={expandedRows}
-          onExpandedRowsChange={newExpandedRows => {
-            expandedRows = newExpandedRows;
-          }}
-          title={() => title}
-          scroll={{x: '530px'}}
-          dataSource={dataSource}
-          columns={columns}
-          size="small"
-          bordered={true}
-          pagination={{position: 'none'}}
-        />
-      </div>
+      <Table
+        style={{
+          transform: 'scale(0.8)'
+        }}
+        defaultExpandedRowKeys={expandedRows}
+        onExpandedRowsChange={newExpandedRows => {
+          expandedRows = newExpandedRows;
+        }}
+        title={() => title}
+        scroll={{x: '530px'}}
+        dataSource={dataSource}
+        columns={columns}
+        size="small"
+        bordered={true}
+        pagination={{position: 'none'}}
+      />
     );
   }
 }
