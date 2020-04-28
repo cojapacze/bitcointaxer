@@ -30,6 +30,7 @@ function getOperations(file) {
 
         record.file = file;
         record.line = i;
+        record.sourcefile = record.file;
         record.portfolio = record.rawCSVLine[0];
         record.coinbaseType = record.rawCSVLine[1];
         record.date = String(record.rawCSVLine[2]).replace('T', ' ').replace('Z', '');
@@ -40,6 +41,7 @@ function getOperations(file) {
         record.transferId = String(record.rawCSVLine[6]);
         record.tradeId = String(record.rawCSVLine[7]);
         record.orderId = String(record.rawCSVLine[8]);
+        record.recordRaw = record;
         switch (record.coinbaseType) {
         case 'deposit':
             record.type = 'deposit';
