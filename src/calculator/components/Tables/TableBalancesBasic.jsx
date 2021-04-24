@@ -184,9 +184,6 @@ class TableBalancesBasic extends React.Component {
     }];
     return (
       <Table
-        style={{
-          transform: 'scale(0.8)'
-        }}
         defaultExpandedRowKeys={expandedRows}
         onExpandedRowsChange={newExpandedRows => {
           expandedRows = newExpandedRows;

@@ -1,16 +1,16 @@
 import {ExportToCsv} from 'export-to-csv';
 // import {
 //     getSortCostsFunction} from '../libs/Utils';
-  
+
 function stocktakingCSV(calculator) {
     const {operationQueue} = calculator;
     const filename = `${calculator.getFilename()}_personal_report`;
-    const options = { 
+    const options = {
         filename: filename,
         fieldSeparator: ',',
         quoteStrings: '"',
         decimalSeparator: '.',
-        showLabels: true, 
+        showLabels: true,
         showTitle: true,
         title: `Bitcointaxer, personal-report ${calculator.year}`,
         useTextFile: false,
@@ -25,7 +25,7 @@ function stocktakingCSV(calculator) {
             'Operation',
             'To amount',
             'To asset',
-            'Fair Market Value',            
+            'Fair Market Value',
             'Proceeds',
             'Cost Basis',
             'Gain/Loss',
@@ -45,7 +45,7 @@ function stocktakingCSV(calculator) {
     }
     const data = [];
     operations.forEach(operation => {
-        const residenceCurrency = operation.calculatorStep.residenceCurrency;    
+        const residenceCurrency = operation.calculatorStep.residenceCurrency;
         if (operation.type === 'stocktaking') {
             data.push({
                 date: operation.date,
@@ -68,7 +68,7 @@ function stocktakingCSV(calculator) {
 
         let costBasis = 0;
         let proceeds = 0;
-        const buy = (operation.from.asset !== residenceCurrency);
+        const buy = operation.from.asset !== residenceCurrency;
         if (buy) {
             costBasis = operation.calculatorStep.operationCostBasis;
             proceeds = operation.calculatorStep.operationProceeds;
@@ -88,7 +88,7 @@ function stocktakingCSV(calculator) {
             proceeds: proceeds.toFixed(2),
             costBasis: costBasis.toFixed(2),
             gainLoss: operation.calculatorStep.operationGainLoss.toFixed(2),
-            usedCosts: (buy) ? usedCostsToString(operation.calculatorStep.operationCostsTaken.usedCosts) : ''
+            usedCosts: (buy && usedCostsToString(operation.calculatorStep.operationCostsTaken.usedCosts)) || ''
             // USDHelperKey: `${USDHelperKey}\n${USDHelperPrice}`,
             // BASEHelperKey: `${BASEHelperKey}\n${BASEHelperPrice}`
         });

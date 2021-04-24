@@ -11,22 +11,23 @@ import {faCalculator} from '@fortawesome/free-solid-svg-icons';
 
 class OperationsSummary extends React.Component {
   static propTypes = {
-    operationQueue: PropTypes.object
+    operationQueue: PropTypes.object,
   };
   state = {
-    currentDate: moment()
-  }
+    currentDate: moment(),
+  };
   constructor(props) {
     super(props);
     const operationQueue = props.operationQueue;
     this.state = {
       colors: true,
-      operationQueue: operationQueue
+      operationQueue: operationQueue,
     };
   }
   render() {
     const {colors, operationQueue} = this.state;
-    const calculatorStep = operationQueue && operationQueue.getLastCalculatorStep();
+    const calculatorStep =
+      operationQueue && operationQueue.getLastCalculatorStep();
     if (!calculatorStep) {
       return <div>unknown calculator step</div>;
     }
@@ -34,12 +35,24 @@ class OperationsSummary extends React.Component {
       <div>
         <TableBalancesBasic
           operationQueue={operationQueue}
-          title={<span>
-            <FontAwesomeIcon icon={faCalculator} style={{marginRight: '4px'}} />
-            <FormattedMessage id="OperationsSummary.balances" defaultMessage="Balances"/>
-          </span>}
-          balances={(calculatorStep && calculatorStep.locBalances) || 'off-calculatorStep'}
-          colors={colors}/>
+          title={
+            <span>
+              <FontAwesomeIcon
+                icon={faCalculator}
+                style={{marginRight: '4px'}}
+              />
+              <FormattedMessage
+                id="OperationsSummary.balances"
+                defaultMessage="Balances"
+              />
+            </span>
+          }
+          balances={
+            (calculatorStep && calculatorStep.locBalances) ||
+            'off-calculatorStep'
+          }
+          colors={colors}
+        />
       </div>
     );
   }

@@ -16,15 +16,15 @@ const CONFIG = {
         trackCoins: false,
         demoSeal: false,
         splitIntoContracts: false,
-        stocktakingNOW: true,
+        stocktakingNOW: false,
         dummy: 'foo'
     },
     calculatorFeatures: {
         fixupResidenceCurrencyCostBasis: true,
         showFine: false
     },
-    testcaseFile: '/tests/testcase_10.csv',
-    priceServerAddress: 'https://priceserver.bitcointaxer.org:8088'
+    testcaseFile: '/tests/testcase_11.csv',
+    priceServerAddress: 'https://newio01.priceserver.bitcointaxer.org:8088'
 };
 const assetsConfig = {
     LTC: {
@@ -132,7 +132,6 @@ const assetsConfig = {
         priceHistoryAdapter: ['nbp'],
         decimalPlaces: 2
     }
-
 };
 const baseConfig = {
     us_usd: {
@@ -247,7 +246,8 @@ function comapreObjectsByFields(a, b, fields) {
     // debugger;
     let firstCompareResult = 0,
         i = 0;
-    function compareByField(field) { // a, b,
+    function compareByField(field) {
+        // a, b,
         let compareResult = 0;
         if (!a || !b) {
             return false;
@@ -300,7 +300,7 @@ const operationConfig = {
     }
 };
 
-// Number.prototype.format(n, x, s, c), 
+// Number.prototype.format(n, x, s, c),
 // @param integer n: length of decimal,
 // @param integer x: length of whole part,
 // @param mixed   s: sections delimiter,
@@ -316,10 +316,9 @@ function format(value, n, x, s, c) {
     // }
 
     if (typeof value.toFixed === 'function') {
-        const
-            num = value.toFixed(Math.max(0, ~~n)),
-            re = `\\d(?=(\\d{${(x || 3)}})+${(n > 0 ? '\\D' : '$')})`;
-        return (c ? num.replace('.', c) : num).replace(new RegExp(re, 'g'), `$&${(s || '')}`);
+        const num = value.toFixed(Math.max(0, ~~n)),
+            re = `\\d(?=(\\d{${x || 3}})+${n > 0 ? '\\D' : '$'})`;
+        return (c ? num.replace('.', c) : num).replace(new RegExp(re, 'g'), `$&${s || ''}`);
     }
     return value;
 }
@@ -329,15 +328,17 @@ function sortAssetsByWeight(assets) {
 }
 
 function getOperationConfig(operationType) {
-    return operationConfig[operationType] || {
-        type: operationType,
-        taxable: false,
-        effType: 'unknown'
-    };
+    return (
+        operationConfig[operationType] || {
+            type: operationType,
+            taxable: false,
+            effType: 'unknown'
+        }
+    );
 }
 function stringLike(string, like) {
     const likeLength = String(like).length;
-    return (String(string).substring(0, likeLength) === like);
+    return String(string).substring(0, likeLength) === like;
 }
 window.stringLike = stringLike;
 
@@ -383,9 +384,9 @@ function getAssets(assetList, sortType) {
         }
     });
     switch (sortType) {
-    default:
-    case 'asc':
-        assetList = sortAssetsByWeight(assetList);
+        default:
+        case 'asc':
+            assetList = sortAssetsByWeight(assetList);
     }
     return assetList;
 }
@@ -405,40 +406,40 @@ function getBlockchainLink(asset, address, tx) {
 
 function getOperationSymbol(operation) {
     switch (operation.type) {
-    case 'contract':
-        return '⇋';
-    case 'trade':
-        return '⇌';
-    case 'atomic-swap':
-        return '⇉';
-    case 'transfer':
-    case 'deposit':
-    case 'withdraw':
-        return '→';
-    default:
-        return '?';
+        case 'contract':
+            return '⇋';
+        case 'trade':
+            return '⇌';
+        case 'atomic-swap':
+            return '⇉';
+        case 'transfer':
+        case 'deposit':
+        case 'withdraw':
+            return '→';
+        default:
+            return '?';
     }
 }
 function getInventorySortFunction(currentQueueMethod) {
     let result = false;
     switch (currentQueueMethod) {
-    case 'FIFO':
-        result = (a, b) => comapreObjectsByFields(a, b, ['date', 'timestamp', 'operationNo', 'rawCSVLineNo']);
-        break;
-    case 'LIFO':
-        result = (a, b) => -1 * comapreObjectsByFields(a, b, ['date', 'timestamp', 'operationNo', 'rawCSVLineNo']);
-        break;
-    case 'HIFO':
-        result = (a, b) => -1 * comapreObjectsByFields(a, b, ['rate', 'date', 'timestamp', 'operationNo', 'rawCSVLineNo']); // a.rate - b.rate;
-        break;
-    case 'LoIFO':
-        result = (a, b) => comapreObjectsByFields(a, b, ['rate', 'date', 'timestamp', 'operationNo', 'rawCSVLineNo']); // b.rate - a.rate;
-        break;
-    case 'AVG':
-        result = (a, b) => comapreObjectsByFields(a, b, ['date', 'timestamp', 'operationNo', 'rawCSVLineNo']);
-        break;
-    default:
-        throw new Error(`Unknown currentQueueMethod: ${currentQueueMethod}`);
+        case 'FIFO':
+            result = (a, b) => comapreObjectsByFields(a, b, ['date', 'timestamp', 'operationNo', 'rawCSVLineNo']);
+            break;
+        case 'LIFO':
+            result = (a, b) => -1 * comapreObjectsByFields(a, b, ['date', 'timestamp', 'operationNo', 'rawCSVLineNo']);
+            break;
+        case 'HIFO':
+            result = (a, b) => -1 * comapreObjectsByFields(a, b, ['rate', 'date', 'timestamp', 'operationNo', 'rawCSVLineNo']); // a.rate - b.rate;
+            break;
+        case 'LoIFO':
+            result = (a, b) => comapreObjectsByFields(a, b, ['rate', 'date', 'timestamp', 'operationNo', 'rawCSVLineNo']); // b.rate - a.rate;
+            break;
+        case 'AVG':
+            result = (a, b) => comapreObjectsByFields(a, b, ['date', 'timestamp', 'operationNo', 'rawCSVLineNo']);
+            break;
+        default:
+            throw new Error(`Unknown currentQueueMethod: ${currentQueueMethod}`);
     }
     return result;
 }
@@ -488,7 +489,7 @@ function timestamp2dateObj(timestamp) {
     const jsTimestamp = Math.trunc(timestamp);
     const date = new Date(jsTimestamp);
     const oNo = Math.abs(timestamp - jsTimestamp);
-  
+
     const dateObj = {
         yyyy: date.getFullYear(),
         mm: String(`0${date.getMonth() + 1}`).substr(-2),
@@ -512,7 +513,7 @@ const padAsset = 16;
 
 function fiatValue(v) {
     let n = 2;
-    const decimalPlaces = (-Math.floor(Math.log10(Math.abs(parseFloat(v)))));
+    const decimalPlaces = -Math.floor(Math.log10(Math.abs(parseFloat(v))));
     if (decimalPlaces > 0) {
         n += decimalPlaces;
     }
@@ -524,19 +525,18 @@ function fiatValue(v) {
     return result;
 }
 
-
 function autoValue(v, currency) {
     const type = (assetsConfig[currency] && assetsConfig[currency].type) || 'unknown';
     if (!v) {
         return 0;
     }
     switch (type) {
-    case 'cryptocurrency':
-        return ccValue(v);
-    case 'fiat':
-        return fiatValue(v);
-    default:
-        return v;
+        case 'cryptocurrency':
+            return ccValue(v);
+        case 'fiat':
+            return fiatValue(v);
+        default:
+            return v;
     }
 }
 const utils = {

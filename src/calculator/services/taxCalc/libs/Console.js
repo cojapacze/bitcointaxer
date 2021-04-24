@@ -1,6 +1,7 @@
 import React from 'react';
-import {message, notification, Icon, Divider, Button} from 'antd';
+import {message, notification, Divider, Button} from 'antd';
 import {PrintOperation, PrintOperationNoAndTimestamp} from '../../../components/Print/';
+import {ExclamationCircleTwoTone} from '@ant-design/icons';
 
 // message.success(content, [duration], onClose)
 // message.error(content, [duration], onClose)
@@ -13,7 +14,7 @@ class Console {
     config = {
         displayErrors: false,
         displayMessages: false
-    }
+    };
     setConfig(config) {
         Object.assign(this.config, config);
     }
@@ -50,45 +51,43 @@ class Console {
                     setTimeout(() => {
                         operationQueue.setCurrent(operation.key); // set current key or refactor to pass operation object
                         operationQueue.dispatch('open-drawer');
-                    }, 500);    
+                    }, 500);
                 } else {
                     // setTimeout(() => {
                     operationQueue.setCurrent(operation.key); // set current key or refactor to pass operation object
                     operationQueue.dispatch('open-drawer');
-                    // }, 250);    
+                    // }, 250);
                 }
             } else if (!operationQueue.drawerOpened) {
                 operationQueue.dispatch('open-drawer');
             }
-        
+
             if (closeDrawer) {
                 notification.close(notificationKey);
             }
         };
-        const button = <Button
-            type={'dashed'}
-            onClick={() => actionShowOperation(false)}
-        >GO TO</Button>;
+        const button = (
+            <Button type={'dashed'} onClick={() => actionShowOperation(false)}>
+                GO TO
+            </Button>
+        );
         notification.open({
             key: notificationKey,
             btn: button,
             message: tag,
-            description: <div>
-                <div onClick={() => actionShowOperation(false)}
-                    style={{fontSize: '12px', cursor: 'pointer'}}
-                >
-                    <PrintOperationNoAndTimestamp operation={operation} totalSteps={operationQueue.getCount()}/>
+            description: (
+                <div>
+                    <div onClick={() => actionShowOperation(false)} style={{fontSize: '12px', cursor: 'pointer'}}>
+                        <PrintOperationNoAndTimestamp operation={operation} totalSteps={operationQueue.getCount()} />
+                    </div>
+                    <div style={{fontSize: '12px', cursor: 'pointer'}} onClick={() => actionShowOperation(false)}>
+                        <PrintOperation operation={operation} colors={true} />
+                    </div>
+                    <Divider orientation="right">Uwagi</Divider>
+                    {errors}
                 </div>
-                <div
-                    style={{fontSize: '12px', cursor: 'pointer'}}
-                    onClick={() => actionShowOperation(false)}
-                >
-                    <PrintOperation operation={operation} colors={true}/>
-                </div>
-                <Divider orientation="right">Uwagi</Divider>
-                {errors}
-            </div>,
-            icon: <Icon type="exclamation-circle" theme={theme} twoToneColor={twoToneColor}/>,
+            ),
+            icon: <ExclamationCircleTwoTone type="exclamation-circle" theme={theme} twoToneColor={twoToneColor} />,
             duration,
             placement
         });
@@ -101,7 +100,7 @@ class Console {
         notification.open({
             message: 'Cookies',
             description: content,
-            icon: <Icon type="info-circle"/>,
+            icon: <ExclamationCircleTwoTone type="info-circle" />,
             duration,
             placement
         });
@@ -120,13 +119,21 @@ class Console {
 
         notification.open({
             // operationQueue.getCount()
-            message: <div style={{fontSize: '12px'}}><PrintOperationNoAndTimestamp operation={operation} totalSteps={666}/></div>,
-            description: <div>
-                <div style={{fontSize: '12px'}}><PrintOperation operation={operation} colors={true}/></div>
-                <hr/>
-                {stamp} {content}
-            </div>,
-            icon: <Icon type="exclamation-circle" theme={theme} twoToneColor={twoToneColor}/>,
+            message: (
+                <div style={{fontSize: '12px'}}>
+                    <PrintOperationNoAndTimestamp operation={operation} totalSteps={666} />
+                </div>
+            ),
+            description: (
+                <div>
+                    <div style={{fontSize: '12px'}}>
+                        <PrintOperation operation={operation} colors={true} />
+                    </div>
+                    <hr />
+                    {stamp} {content}
+                </div>
+            ),
+            icon: <ExclamationCircleTwoTone type="exclamation-circle" theme={theme} twoToneColor={twoToneColor} />,
             duration,
             placement
         });

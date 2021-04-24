@@ -5,18 +5,12 @@ import {EditAsset, EditTagsQuick} from '../Edit';
 import {PrintOperationCurrentErrors} from '../Print';
 import {getAssetConfig} from '../../services/taxCalc/libs/Utils';
 import {operationQueue} from '../../services/taxCalc/index.js';
-import {
-  Button,
-  Form,
-  Icon,
-  Input,
-  Switch,
-  Upload
-} from 'antd';
+import {Button, Form, Input, Switch, Upload} from 'antd';
+import {PaperClipOutlined} from '@ant-design/icons';
 import {CONFIG} from '../../services/taxCalc/libs/Utils';
 
 class OperationDetailsError extends React.Component {
-  state = {}
+  state = {};
 
   static getDerivedStateFromProps(props) {
     return props;
@@ -35,21 +29,22 @@ class OperationDetailsError extends React.Component {
   }
   getCurrentMissingCostKey() {
     const operation = this.getCurrentOperation();
-    const missingCostKey = operation.calculatorStep.operationMissingCostPart.missingCostKey;
+    const missingCostKey =
+      operation.calculatorStep.operationMissingCostPart.missingCostKey;
     return missingCostKey;
   }
   setCostBasis(costBasis) {
     const missingCost = this.getCurrentMissingCost();
     operationQueue.setMissingCost(missingCost, {
       costBasis: costBasis,
-      rate: (missingCost.amount) ? costBasis / missingCost.amount : 0
+      rate: missingCost.amount ? costBasis / missingCost.amount : 0,
     });
     this.forceUpdate();
   }
   setNotes(notes) {
     const missingCost = this.getCurrentMissingCost();
     operationQueue.setMissingCost(missingCost, {
-      notes: notes
+      notes: notes,
     });
     this.forceUpdate();
   }
@@ -57,7 +52,7 @@ class OperationDetailsError extends React.Component {
   setPenalty(penalty) {
     const missingCost = this.getCurrentMissingCost();
     operationQueue.setMissingCost(missingCost, {
-      penalty: penalty
+      penalty: penalty,
     });
     this.forceUpdate();
   }
@@ -65,7 +60,7 @@ class OperationDetailsError extends React.Component {
   setErrorResolved(errorResolved) {
     const missingCost = this.getCurrentMissingCost();
     operationQueue.setMissingCost(missingCost, {
-      errorResolved: errorResolved
+      errorResolved: errorResolved,
     });
     this.forceUpdate();
   }
@@ -75,7 +70,7 @@ class OperationDetailsError extends React.Component {
       labelCol: {span: 8},
       wrapperCol: {span: 16},
       className: 'compact-form-item',
-      layout: 'inline'
+      layout: 'inline',
     };
     const operation = this.getCurrentOperation();
     const {colors} = this.state;
@@ -84,7 +79,9 @@ class OperationDetailsError extends React.Component {
     }
     operation.from.assetConfig = getAssetConfig(operation.from.asset);
     operation.to.assetConfig = getAssetConfig(operation.to.asset);
-    const missingCost = operationQueue.getMissingCost(operation.calculatorStep.operationMissingCostPart);
+    const missingCost = operationQueue.getMissingCost(
+      operation.calculatorStep.operationMissingCostPart,
+    );
     let costBasis = 0;
     let penalty = 0;
     let errorResolved = false;
@@ -113,145 +110,141 @@ class OperationDetailsError extends React.Component {
         //   response: 'Server Error 500', // custom error message to show
         //   url: 'https://bitcointaxr.org/tests/test01.csv'
         // }
-      ]
+      ],
     };
-    const elements = [];
-    elements.push(
-      <div key={'errors'} style={{textAlign: 'center'}}>
-        <PrintOperationCurrentErrors operation={operation} colors={colors} />
-      </div>
-    );
-    elements.push(
-      <div key={'resolved'} style={{textAlign: 'center', marginBottom: '48px', marginTop: '8px'}}>
-        <Switch
-          id="drawer-error-status"
-          checkedChildren={<FormattedMessage
-            id="OperationDetailsError.resolved"
-            defaultMessage="Resolved"
-          />}
-          unCheckedChildren={<FormattedMessage
-            id="OperationDetailsError.unresolved"
-            defaultMessage="Unresolved"
-          />}
-          checked={errorResolved}
-          onChange={e => this.setErrorResolved(e)}
-        />
-      </div>
-    );
-    elements.push(
-      <Form.Item
-        key={'costBasis'}
-        {...formItemLayout}
-        label={<FormattedMessage
-          id="OperationDetailsError.costBasis"
-          defaultMessage="Cost Basis"
-        />}
-      >
-        <EditAsset
-          disabled={disabled}
-          id="drawer-error-costBasis"
-          mode={'text'}
-          disableBlink={true}
-          value={costBasis}
-          asset={operation.calculatorStep.residenceCurrency}
-          onChange={e => this.setCostBasis(parseFloat(e.target.value))}
-          onChangeBlur={() => operationQueue.recalculateIfModified()}
-        />
-      </Form.Item>
-    );
-    if (CONFIG.calculatorFeatures.showFine) {
-      elements.push(
+    return (
+      <Form>
+        <div key={'errors'} style={{textAlign: 'center'}}>
+          <PrintOperationCurrentErrors operation={operation} colors={colors} />
+        </div>
+        <div
+          key={'resolved'}
+          style={{textAlign: 'center', marginBottom: '48px', marginTop: '8px'}}
+        >
+          <Switch
+            id="drawer-error-status"
+            checkedChildren={
+              <FormattedMessage
+                id="OperationDetailsError.resolved"
+                defaultMessage="Resolved"
+              />
+            }
+            unCheckedChildren={
+              <FormattedMessage
+                id="OperationDetailsError.unresolved"
+                defaultMessage="Unresolved"
+              />
+            }
+            checked={errorResolved}
+            onChange={e => this.setErrorResolved(e)}
+          />
+        </div>
         <Form.Item
-          key={'fine'}
+          key={'costBasis'}
           {...formItemLayout}
-          label={<FormattedMessage
-            id="OperationDetailsError.fine"
-            defaultMessage="Fine"
-          />}
+          label={
+            <FormattedMessage
+              id="OperationDetailsError.costBasis"
+              defaultMessage="Cost Basis"
+            />
+          }
         >
           <EditAsset
             disabled={disabled}
-            id="drawer-error-penalty"
+            id="drawer-error-costBasis"
             mode={'text'}
             disableBlink={true}
-            value={penalty}
+            value={costBasis}
             asset={operation.calculatorStep.residenceCurrency}
-            onChange={e => this.setPenalty(parseFloat(e.target.value))}
+            onChange={e => this.setCostBasis(parseFloat(e.target.value))}
+            onChangeBlur={() => operationQueue.recalculateIfModified()}
           />
         </Form.Item>
-      );
-    }
-
-    if (CONFIG.features.trackCoins) {
-      elements.push(
-        <Form.Item
-          key={'tags'}
-          {...formItemLayout}
-          label={<FormattedMessage
-            id="OperationDetailsError.tags"
-            defaultMessage="Tags"
-          />}
-        >
-          <EditTagsQuick
-            disabled={disabled}
-            id="drawer-error-tagsQuick"
-            operationQueue={operationQueue}
-            operation={operation}
-          />
-        </Form.Item>
-      );
-    }
-    elements.push(
-      <Form.Item
-        key={'notes'}
-        {...formItemLayout}
-        label={<FormattedMessage
-          id="OperationDetailsError.notes"
-          defaultMessage="Notes"
-        />}
-      >
-        <Input.TextArea
-          disabled={disabled}
-          id="drawer-error-notes"
-          rows={4}
-          value={notes}
-          onChange={e => this.setNotes(String(e.target.value))}
-        />
-      </Form.Item>
-    );
-    const a = false;
-    if (a) {
-      elements.push(
-        <Form.Item
-          key={'documents'}
-          {...formItemLayout}
-          label={<FormattedMessage
-            id="OperationDetailsError.documents"
-            defaultMessage="Documents"
-          />}
-        >
-          <Upload
-            {...uploadProps}
-            disabled={disabled}
-          >
-            <Button>
-              <Icon type="paper-clip" /> <FormattedMessage
-                id="OperationDetailsError.documents.attach"
-                defaultMessage="Attach"
+        {CONFIG.calculatorFeatures.showFine && (
+          <Form.Item
+            key={'fine'}
+            {...formItemLayout}
+            label={
+              <FormattedMessage
+                id="OperationDetailsError.fine"
+                defaultMessage="Fine"
               />
-            </Button>
-          </Upload>
-        </Form.Item>
-      );
-    }
+            }
+          >
+            <EditAsset
+              disabled={disabled}
+              id="drawer-error-penalty"
+              mode={'text'}
+              disableBlink={true}
+              value={penalty}
+              asset={operation.calculatorStep.residenceCurrency}
+              onChange={e => this.setPenalty(parseFloat(e.target.value))}
+            />
+          </Form.Item>
+        )}
 
-    return (
-      <Form>
-        {elements}
+        {CONFIG.features.trackCoins && (
+          <Form.Item
+            key={'tags'}
+            {...formItemLayout}
+            label={
+              <FormattedMessage
+                id="OperationDetailsError.tags"
+                defaultMessage="Tags"
+              />
+            }
+          >
+            <EditTagsQuick
+              disabled={disabled}
+              id="drawer-error-tagsQuick"
+              operationQueue={operationQueue}
+              operation={operation}
+            />
+          </Form.Item>
+        )}
+        <Form.Item
+          key={'notes'}
+          {...formItemLayout}
+          label={
+            <FormattedMessage
+              id="OperationDetailsError.notes"
+              defaultMessage="Notes"
+            />
+          }
+        >
+          <Input.TextArea
+            disabled={disabled}
+            id="drawer-error-notes"
+            rows={4}
+            value={notes}
+            onChange={e => this.setNotes(String(e.target.value))}
+          />
+        </Form.Item>
+        {false && (
+          <Form.Item
+            key={'documents'}
+            {...formItemLayout}
+            label={
+              <FormattedMessage
+                id="OperationDetailsError.documents"
+                defaultMessage="Documents"
+              />
+            }
+          >
+            <Upload {...uploadProps} disabled={disabled}>
+              <Button>
+                <PaperClipOutlined type="paper-clip" />{' '}
+                <FormattedMessage
+                  id="OperationDetailsError.documents.attach"
+                  defaultMessage="Attach"
+                />
+              </Button>
+            </Upload>
+          </Form.Item>
+        )}
       </Form>
     );
   }
 }
-
 
 export default OperationDetailsError;

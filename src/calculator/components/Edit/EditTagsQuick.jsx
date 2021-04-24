@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {Tag, Input, Tooltip, Icon} from 'antd';
+import {Tag, Input, Tooltip} from 'antd';
 import {colorOfHash} from '../../services/taxCalc/libs/Utils';
+import {PlusCircleOutlined} from '@ant-design/icons';
 
 class EditTagsQuick extends React.Component {
   static propTypes = {
@@ -97,7 +98,7 @@ class EditTagsQuick extends React.Component {
             onClick={this.showInput}
             style={{background: '#fff', borderStyle: 'dashed'}}
           >
-            <Icon type="plus" /> New Tag
+            <PlusCircleOutlined type="plus" /> New Tag
           </Tag>
         )}
       </span>

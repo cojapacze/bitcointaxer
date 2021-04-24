@@ -26,14 +26,44 @@ import 'ant-design-pro/dist/ant-design-pro.css';
 import './styles/custom.css';
 
 import {ConfigProvider} from 'antd';
-import {addLocaleData, IntlProvider} from 'react-intl';
+import {IntlProvider} from 'react-intl';
+import globalMessageValues from './locales/globalMessageValues.js';
 
-import plAntd from 'antd/lib/locale-provider/pl_PL';
-import plAppLocaleData from 'react-intl/locale-data/pl';
+// Start: Old-browsers polyfill
+import {shouldPolyfill as shouldPolyfillPluralRules} from '@formatjs/intl-pluralrules/should-polyfill';
+import {shouldPolyfill as shouldPolyfillRelativeTimeFormat} from '@formatjs/intl-relativetimeformat/should-polyfill';
+async function polyfillTranslations(locale) {
+  if (shouldPolyfillPluralRules()) {
+    await import('@formatjs/intl-pluralrules/polyfill');
+  }
+  if (Intl.PluralRules.polyfilled) {
+    switch (locale) {
+      default:
+        await import('@formatjs/intl-pluralrules/locale-data/en');
+        break;
+      case 'pl':
+        await import('@formatjs/intl-pluralrules/locale-data/pl');
+        break;
+    }
+  }
+
+  if (shouldPolyfillRelativeTimeFormat()) {
+    await import('@formatjs/intl-relativetimeformat/polyfill');
+  }
+  if (Intl.RelativeTimeFormat.polyfilled) {
+    switch (locale) {
+      default:
+        await import('@formatjs/intl-relativetimeformat/locale-data/en');
+        break;
+      case 'pl':
+        await import('@formatjs/intl-relativetimeformat/locale-data/pl');
+        break;
+    }
+  }
+}
+// End: Old-browsers polyfill
+
 import plMessages from './locales/pl.json';
-
-import enAntd from 'antd/lib/locale-provider/en_US';
-import enAppLocaleData from 'react-intl/locale-data/en';
 import enMessages from './locales/en.json';
 
 const translations = [
@@ -41,19 +71,13 @@ const translations = [
     name: 'English (global) ',
     locale: 'en',
     messages: enMessages,
-    antd: enAntd,
-    data: enAppLocaleData
   },
   {
     name: 'Polski (PL)',
     locale: 'pl',
     messages: plMessages,
-    antd: plAntd,
-    data: plAppLocaleData
-  }
+  },
 ];
-translations.forEach(t => addLocaleData(t.data));
-
 
 class Root extends React.Component {
   static getDerivedStateFromProps(props) {
@@ -62,16 +86,20 @@ class Root extends React.Component {
   constructor() {
     super();
     this.state = {
-      localeLanguage: user.getLocaleLanguage()
+      localeLanguage: user.getLocaleLanguage(),
     };
   }
   onLocaleChange(localeLanguage) {
+    console.log('current locale', localeLanguage);
+    // old browsers polyfill
+    polyfillTranslations(localeLanguage);
     this.setState({localeLanguage});
   }
   render() {
     const {localeLanguage} = this.state;
-    const translation = translations.find(t => t.locale === localeLanguage) || translations[0];
-    const result =
+    const translation =
+      translations.find(t => t.locale === localeLanguage) || translations[0];
+    const result = (
       <div>
         <BrowserRouter>
           <Layout>
@@ -80,13 +108,23 @@ class Root extends React.Component {
               {/* <LeftMenu /> */}
               <Layout style={{padding: '24px 24px 24px'}}>
                 {/* <Breadcrumb /> */}
-                <Layout.Content style={{background: '#fff', padding: 24, margin: 0, minHeight: 280}}>
+                <Layout.Content
+                  style={{
+                    background: '#fff',
+                    padding: 24,
+                    margin: 0,
+                    minHeight: 280,
+                  }}
+                >
                   <Switch>
                     <Route exact path="/" component={StartPage} />
                     <Route path="/introduction/:step" component={ManualPage} />
                     <Route path="/calculator" component={CalculatorPage} />
                     <Route path="/how-to-file" component={HowToFilePage} />
-                    <Route path="/find-tax-advisor" component={FindTaxAdvisorPage} />
+                    <Route
+                      path="/find-tax-advisor"
+                      component={FindTaxAdvisorPage}
+                    />
                     {/* <Route path="/faq" component={FaqPage} /> */}
                     {/* <Route path="/pages/:id" component={Page} /> */}
                     {/* <Route path="*" component={HomePage} /> */}
@@ -101,11 +139,18 @@ class Root extends React.Component {
           currentLocale={localeLanguage}
           onLocaleChange={this.onLocaleChange.bind(this)}
         />
-      </div>;
+      </div>
+    );
 
     return (
       <ConfigProvider locale={translation.antd}>
-        <IntlProvider locale={translation.locale} messages={translation.messages}>
+        <IntlProvider
+          locale={translation.locale}
+          messages={translation.messages}
+          formats={{
+            ...globalMessageValues,
+          }}
+        >
           {result}
         </IntlProvider>
       </ConfigProvider>

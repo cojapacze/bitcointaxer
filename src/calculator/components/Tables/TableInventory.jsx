@@ -18,7 +18,8 @@ class TableInventory extends React.Component {
     colors: PropTypes.bool,
     costs: PropTypes.array,
     title: PropTypes.node,
-    trackLocations: PropTypes.bool
+    trackLocations: PropTypes.bool,
+    calculatorStep: PropTypes.object,
   }
   render() {
     const props = this.props;

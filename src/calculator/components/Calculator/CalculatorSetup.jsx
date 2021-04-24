@@ -5,21 +5,17 @@ import {FormattedMessage} from 'react-intl';
 import {
   EditSetupCalculator,
   EditSetupCalculatorTaxResidence,
-  EditSetupValuation
+  EditSetupValuation,
 } from '../Edit';
-import {
-  Button,
-  Collapse,
-  Spin
-} from 'antd';
+import {Button, Collapse, Spin} from 'antd';
 
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
 import {faMagic} from '@fortawesome/free-solid-svg-icons';
 
 class CalculatorSetup extends React.Component {
   static propTypes = {
-    calculator: PropTypes.object
-  }
+    calculator: PropTypes.object,
+  };
   static getDerivedStateFromProps(props) {
     return props;
   }
@@ -28,11 +24,13 @@ class CalculatorSetup extends React.Component {
     super(props);
     const {calculator} = props;
     this.state = {
-      calculator: calculator
+      calculator: calculator,
     };
     this.calculator = calculator;
     if (!calculator) {
-      console.error('AnnualStatementCalculator:constructor - no calculator in props');
+      console.error(
+        'AnnualStatementCalculator:constructor - no calculator in props',
+      );
       return;
     }
     this.operationQueue = calculator.operationQueue;
@@ -58,52 +56,69 @@ class CalculatorSetup extends React.Component {
   render() {
     const {calculator} = this.state;
     if (!calculator) {
-      return <div className="empty-box"><Spin /></div>;
+      return (
+        <div className="empty-box">
+          <Spin />
+        </div>
+      );
     }
     const isSetupModified = calculator.setupModified;
     const customPanelStyle = {
-      border: 0
+      border: 0,
     };
-    return <div>
-      <h2><FormattedMessage
-        id="AnnualStatementCalculator.title"
-        defaultMessage="{year} Annual Report"
-        values={{
-          year: calculator.year
-        }}
-      /></h2>
-      <EditSetupCalculatorTaxResidence
-        calculator={calculator}
-      />
-      <Collapse bordered={false} defaultActiveKey={['calculator']}>
-        <Collapse.Panel style={customPanelStyle} header={<FormattedMessage
-          id="AnnualStatementCalculator.calculationSetupTitle"
-          defaultMessage="Calculation"
-        />} key="calculator">
-          <EditSetupCalculator
-            calculator={calculator}
+    return (
+      <div>
+        <h2>
+          <FormattedMessage
+            id="AnnualStatementCalculator.title"
+            defaultMessage="{year} Annual Report"
+            values={{
+              year: calculator.year,
+            }}
           />
-        </Collapse.Panel>
-        <Collapse.Panel style={customPanelStyle} header={<FormattedMessage
-          id="AnnualStatementCalculator.valuationSetupTitle"
-          defaultMessage="Valuation"
-        />} key="valuation">
-          <EditSetupValuation
-            calculator={calculator}
-          />
-        </Collapse.Panel>
-      </Collapse>
-      <div style={{textAlign: 'right'}}>
-        <Button
-          type="danger"
-          disabled={!isSetupModified}
-          onClick={this.applySetups.bind(this)}
-        ><FontAwesomeIcon icon={faMagic} style={{marginRight: '4px'}} /><FormattedMessage
-            id="AnnualStatementCalculator.applySetups"
-            defaultMessage="Apply"
-          /></Button>
+        </h2>
+        <EditSetupCalculatorTaxResidence calculator={calculator} />
+        <Collapse bordered={false} defaultActiveKey={['calculator']}>
+          <Collapse.Panel
+            style={customPanelStyle}
+            header={
+              <FormattedMessage
+                id="AnnualStatementCalculator.calculationSetupTitle"
+                defaultMessage="Calculation"
+              />
+            }
+            key="calculator"
+          >
+            <EditSetupCalculator calculator={calculator} />
+          </Collapse.Panel>
+          <Collapse.Panel
+            style={customPanelStyle}
+            header={
+              <FormattedMessage
+                id="AnnualStatementCalculator.valuationSetupTitle"
+                defaultMessage="Valuation"
+              />
+            }
+            key="valuation"
+          >
+            <EditSetupValuation calculator={calculator} />
+          </Collapse.Panel>
+        </Collapse>
+        <div style={{textAlign: 'right'}}>
+          <Button
+            type="danger"
+            disabled={!isSetupModified}
+            onClick={this.applySetups.bind(this)}
+          >
+            <FontAwesomeIcon icon={faMagic} style={{marginRight: '4px'}} />
+            <FormattedMessage
+              id="AnnualStatementCalculator.applySetups"
+              defaultMessage="Apply"
+            />
+          </Button>
+        </div>
       </div>
-    </div>;
+    );
   }
 }
 

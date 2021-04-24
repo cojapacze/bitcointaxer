@@ -1,6 +1,6 @@
 import Eventsmanager from './Eventsmanager';
 import {getAssetConfig, CONFIG} from './Utils';
-import openSocket from 'socket.io-client';
+import {io} from 'socket.io-client';
 
 class Prices extends Eventsmanager {
     cachedPrices = [];
@@ -71,7 +71,7 @@ class Prices extends Eventsmanager {
             }
         });
         return result;
-    }
+    };
 
     /* setters */
     setOperationValuationCustomValue(operationValuation, value) {
@@ -155,10 +155,8 @@ class Prices extends Eventsmanager {
             counters
         });
         return true;
-    }
-    setOperationValuationSidePriceAlternative = (
-        alternativesList, alternative, alternativeKey, checked, operationValuation, sidePrice
-    ) => {
+    };
+    setOperationValuationSidePriceAlternative = (alternativesList, alternative, alternativeKey, checked, operationValuation, sidePrice) => {
         const selectedCount = alternativesList.reduce((c, price) => {
             if (price.checked) {
                 return c + 1;
@@ -180,7 +178,7 @@ class Prices extends Eventsmanager {
             this.dispatch('operation-valuation-changed', {
                 operationValuation,
                 counters
-            });    
+            });
         }
         if (sidePrice) {
             this.dispatch('price-alternative-changed', {
@@ -189,10 +187,8 @@ class Prices extends Eventsmanager {
             });
         }
         return true;
-    }
-    setOperationValuationSidePriceAlternativeResults = (
-        alternativePriceArgument, alternativePriceResultKey, checked, operationValuation, sidePrice
-    ) => {
+    };
+    setOperationValuationSidePriceAlternativeResults = (alternativePriceArgument, alternativePriceResultKey, checked, operationValuation, sidePrice) => {
         const selectedCount = alternativePriceArgument.results.reduce((c, price) => {
             if (price.checked) {
                 return c + 1;
@@ -201,11 +197,8 @@ class Prices extends Eventsmanager {
         }, 0);
         if (selectedCount < 2 && !checked) {
             return false;
-        }    
-        alternativePriceArgument
-            .results
-            .find(price => price.key === alternativePriceResultKey)
-            .checked = checked;
+        }
+        alternativePriceArgument.results.find(price => price.key === alternativePriceResultKey).checked = checked;
 
         const counters = this.getCounters();
         if (operationValuation) {
@@ -228,8 +221,8 @@ class Prices extends Eventsmanager {
                 counters
             });
         }
-        return true;    
-    }
+        return true;
+    };
 
     /* auto price strategy */
     getValidPriceResults(priceObject) {
@@ -271,16 +264,12 @@ class Prices extends Eventsmanager {
             minResult.checked = true;
             priceObject.resultsSelected = validPriceResults.filter(result => result.checked);
             // calculate current price based of avg of selected price results
-            priceObject.price = priceObject.resultsSelected
-                .reduce((previousValue, currentValue) => previousValue + currentValue.value, 0)
-                / priceObject.resultsSelected.length;
+            priceObject.price = priceObject.resultsSelected.reduce((previousValue, currentValue) => previousValue + currentValue.value, 0) / priceObject.resultsSelected.length;
         }
         // #2: arguments
         if (priceObject.arguments && priceObject.arguments.length) {
             priceObject.arguments.forEach(this.selectLowestResult.bind(this));
-            priceObject.price = 
-            priceObject.arguments
-                .reduce((previousValue, currentValue) => previousValue * currentValue.price, 1);
+            priceObject.price = priceObject.arguments.reduce((previousValue, currentValue) => previousValue * currentValue.price, 1);
         }
     }
     selectHighestResult(priceObject) {
@@ -296,16 +285,12 @@ class Prices extends Eventsmanager {
             maxResult.checked = true;
             priceObject.resultsSelected = validPriceResults.filter(result => result.checked);
             // calculate current price based of avg of selected price results
-            priceObject.price = priceObject.resultsSelected
-                .reduce((previousValue, currentValue) => previousValue + currentValue.value, 0)
-                / priceObject.resultsSelected.length;
+            priceObject.price = priceObject.resultsSelected.reduce((previousValue, currentValue) => previousValue + currentValue.value, 0) / priceObject.resultsSelected.length;
         }
         // #2: arguments
         if (priceObject.arguments && priceObject.arguments.length) {
             priceObject.arguments.forEach(this.selectHighestResult.bind(this));
-            priceObject.price = 
-            priceObject.arguments
-                .reduce((previousValue, currentValue) => previousValue * currentValue.price, 1);
+            priceObject.price = priceObject.arguments.reduce((previousValue, currentValue) => previousValue * currentValue.price, 1);
         }
     }
     selectResult(priceObject, key) {
@@ -318,21 +303,17 @@ class Prices extends Eventsmanager {
                 }
             });
             priceObject.resultsSelected = validPriceResults.filter(result => result.checked);
-            priceObject.price = priceObject.resultsSelected
-                .reduce((previousValue, currentValue) => previousValue + currentValue.value, 0)
-                / priceObject.resultsSelected.length;
+            priceObject.price = priceObject.resultsSelected.reduce((previousValue, currentValue) => previousValue + currentValue.value, 0) / priceObject.resultsSelected.length;
         }
         // #2: arguments
         if (priceObject.arguments && priceObject.arguments.length) {
-            priceObject.arguments.forEach(argument =>
-                this.selectResult(argument, key));
-            priceObject.price = 
-                priceObject.arguments
-                    .reduce((previousValue, currentValue) => previousValue * currentValue.price, 1);
+            priceObject.arguments.forEach(argument => this.selectResult(argument, key));
+            priceObject.price = priceObject.arguments.reduce((previousValue, currentValue) => previousValue * currentValue.price, 1);
         }
     }
 
     selectPriceResults(sidePrice, keys) {
+        // debugger;
         if (sidePrice.alternatives && sidePrice.alternatives.length) {
             sidePrice.alternativesValid = sidePrice.alternatives.filter(alternative => !alternative.error);
         }
@@ -342,14 +323,14 @@ class Prices extends Eventsmanager {
                 this.cleanResult(alternative);
                 keys.forEach(key => {
                     switch (key) {
-                    case 'low':
-                        this.selectLowestResult(alternative);
-                        break;
-                    case 'high':
-                        this.selectHighestResult(alternative);
-                        break;
-                    default:
-                        this.selectResult(alternative, key);
+                        case 'low':
+                            this.selectLowestResult(alternative);
+                            break;
+                        case 'high':
+                            this.selectHighestResult(alternative);
+                            break;
+                        default:
+                            this.selectResult(alternative, key);
                     }
                 });
             });
@@ -378,8 +359,7 @@ class Prices extends Eventsmanager {
             sidePrice.alternativesValid = sidePrice.alternatives.filter(alternative => !alternative.error);
         }
         if (sidePrice.alternativesValid && sidePrice.alternativesValid.length) {
-            const foundCustomAdapterAlternative =
-                sidePrice.alternativesValid.find(alternative => alternative.adapter === customAlternativeAdapter);
+            const foundCustomAdapterAlternative = sidePrice.alternativesValid.find(alternative => alternative.adapter === customAlternativeAdapter);
             if (foundCustomAdapterAlternative) {
                 sidePrice.custom = NaN;
                 sidePrice.alternativesValid.forEach(alternative => {
@@ -393,10 +373,8 @@ class Prices extends Eventsmanager {
     }
 
     selectLowerSide(operationValuation) {
-        operationValuation.fromAssetValue = this.recalculateSidePrice(operationValuation.fromPrice)
-            * operationValuation.operation.from.amount;
-        operationValuation.toAssetValue = this.recalculateSidePrice(operationValuation.toPrice)
-            * operationValuation.operation.to.amount;
+        operationValuation.fromAssetValue = this.recalculateSidePrice(operationValuation.fromPrice) * operationValuation.operation.from.amount;
+        operationValuation.toAssetValue = this.recalculateSidePrice(operationValuation.toPrice) * operationValuation.operation.to.amount;
 
         operationValuation.custom = NaN;
         if (operationValuation.fromAssetValue === operationValuation.toAssetValue) {
@@ -411,10 +389,8 @@ class Prices extends Eventsmanager {
         }
     }
     selectHigherSide(operationValuation) {
-        operationValuation.fromAssetValue = this.recalculateSidePrice(operationValuation.fromPrice)
-            * operationValuation.operation.from.amount;
-        operationValuation.toAssetValue = this.recalculateSidePrice(operationValuation.toPrice)
-            * operationValuation.operation.to.amount;
+        operationValuation.fromAssetValue = this.recalculateSidePrice(operationValuation.fromPrice) * operationValuation.operation.from.amount;
+        operationValuation.toAssetValue = this.recalculateSidePrice(operationValuation.toPrice) * operationValuation.operation.to.amount;
 
         operationValuation.custom = NaN;
         if (operationValuation.fromAssetValue === operationValuation.toAssetValue) {
@@ -429,24 +405,22 @@ class Prices extends Eventsmanager {
         }
     }
     selectSide(operationValuation, side) {
-        operationValuation.fromAssetValue = this.recalculateSidePrice(operationValuation.fromPrice)
-            * operationValuation.operation.from.amount;
-        operationValuation.toAssetValue = this.recalculateSidePrice(operationValuation.toPrice)
-            * operationValuation.operation.to.amount;
+        operationValuation.fromAssetValue = this.recalculateSidePrice(operationValuation.fromPrice) * operationValuation.operation.from.amount;
+        operationValuation.toAssetValue = this.recalculateSidePrice(operationValuation.toPrice) * operationValuation.operation.to.amount;
 
         operationValuation.custom = NaN;
         switch (side) {
-        case 'quote':
-            operationValuation.useBaseAssetValue = false;
-            operationValuation.useQuoteAssetValue = true;
-            break;
-        case 'base':
-            operationValuation.useBaseAssetValue = true;
-            operationValuation.useQuoteAssetValue = false;
-            break;
-        default:
-            operationValuation.useBaseAssetValue = true;
-            operationValuation.useQuoteAssetValue = true;
+            case 'quote':
+                operationValuation.useBaseAssetValue = false;
+                operationValuation.useQuoteAssetValue = true;
+                break;
+            case 'base':
+                operationValuation.useBaseAssetValue = true;
+                operationValuation.useQuoteAssetValue = false;
+                break;
+            default:
+                operationValuation.useBaseAssetValue = true;
+                operationValuation.useQuoteAssetValue = true;
         }
     }
 
@@ -508,11 +482,9 @@ class Prices extends Eventsmanager {
         }
         if (sidePrice.alternativesValid && sidePrice.alternativesValid.length) {
             // recalculate all alternative prices
-            sidePrice.alternativesValid
-                .map(childPrice => this.recalculateSidePrice(childPrice));
+            sidePrice.alternativesValid.map(childPrice => this.recalculateSidePrice(childPrice));
             // choose selected prices
-            let alternativesSelected =
-                sidePrice.alternativesValid.filter(result => result.checked);
+            let alternativesSelected = sidePrice.alternativesValid.filter(result => result.checked);
             // select default
             if (!alternativesSelected.length) {
                 sidePrice.alternativesValid[0].checked = true;
@@ -520,9 +492,7 @@ class Prices extends Eventsmanager {
             }
             sidePrice.alternativesSelected = alternativesSelected;
             // calculate current price based on avg of selected alternative prices
-            sidePrice.price = alternativesSelected
-                .reduce((previousValue, currentValue) => previousValue + currentValue.price, 0)
-                / alternativesSelected.length;
+            sidePrice.price = alternativesSelected.reduce((previousValue, currentValue) => previousValue + currentValue.price, 0) / alternativesSelected.length;
             return sidePrice.price;
         }
 
@@ -530,12 +500,9 @@ class Prices extends Eventsmanager {
         // arguments
         if (priceObject.arguments && priceObject.arguments.length) {
             // recalculate all argument prices
-            priceObject.arguments
-                .map(childPrice => this.recalculateSidePrice(childPrice));
+            priceObject.arguments.map(childPrice => this.recalculateSidePrice(childPrice));
             // calculate current price by multiplication of arguments
-            priceObject.price = 
-                priceObject.arguments
-                    .reduce((previousValue, currentValue) => previousValue * currentValue.price, 1);
+            priceObject.price = priceObject.arguments.reduce((previousValue, currentValue) => previousValue * currentValue.price, 1);
             return priceObject.price;
         }
 
@@ -553,10 +520,8 @@ class Prices extends Eventsmanager {
                 }
                 priceObject.resultsSelected = selectedPricesResults;
                 // calculate current price based of avg of selected price results
-                priceObject.price = selectedPricesResults
-                    .reduce((previousValue, currentValue) => previousValue + currentValue.value, 0)
-                    / selectedPricesResults.length;
-                return priceObject.price;    
+                priceObject.price = selectedPricesResults.reduce((previousValue, currentValue) => previousValue + currentValue.value, 0) / selectedPricesResults.length;
+                return priceObject.price;
             }
         }
         Error('Unknown price object, (No prices results and no childrens).');
@@ -567,26 +532,16 @@ class Prices extends Eventsmanager {
         // wycena kalkulatora powinna byc zawsze robiona na obiekcie z operationQueue
         // ktory jest kopiowany do kalkulatora
         // w innym wypadku wydaje sie, ze waluacja dziala na jakiejs kopii
-        operationValuation.fromAssetValue = this.recalculateSidePrice(operationValuation.fromPrice)
-            * operationValuation.operation.from.amount;
-        operationValuation.toAssetValue = this.recalculateSidePrice(operationValuation.toPrice)
-            * operationValuation.operation.to.amount;
-        if (
-            !operationValuation.useBaseAssetValue &&
-            !operationValuation.useQuoteAssetValue &&
-            operationValuation.custom
-        ) {
+        operationValuation.fromAssetValue = this.recalculateSidePrice(operationValuation.fromPrice) * operationValuation.operation.from.amount;
+        operationValuation.toAssetValue = this.recalculateSidePrice(operationValuation.toPrice) * operationValuation.operation.to.amount;
+        if (!operationValuation.useBaseAssetValue && !operationValuation.useQuoteAssetValue && operationValuation.custom) {
             operationValuation.modified = true;
             operationValuation.value = operationValuation.custom;
         } else {
             operationValuation.custom = NaN;
             operationValuation.modified = false;
             // no-side selected fallback
-            if (
-                !operationValuation.useBaseAssetValue &&
-                !operationValuation.useQuoteAssetValue &&
-                !operationValuation.custom
-            ) {
+            if (!operationValuation.useBaseAssetValue && !operationValuation.useQuoteAssetValue && !operationValuation.custom) {
                 operationValuation.useBaseAssetValue = true;
                 operationValuation.useQuoteAssetValue = true;
             }
@@ -597,13 +552,11 @@ class Prices extends Eventsmanager {
             if (operationValuation.useQuoteAssetValue) {
                 values.push(operationValuation.toAssetValue);
             }
-            operationValuation.value = values
-                .reduce((previousValue, currentValue) => previousValue + currentValue, 0)
-                / values.length;
+            operationValuation.value = values.reduce((previousValue, currentValue) => previousValue + currentValue, 0) / values.length;
         }
         if (operationValuation.operation.cryptoToCryptoTrade && operationValuation.valuationCTCDiscount) {
             operationValuation.modified = true;
-            operationValuation.value *= 1 - (operationValuation.valuationCTCDiscount / 100);
+            operationValuation.value *= 1 - operationValuation.valuationCTCDiscount / 100;
         }
         return operationValuation.value;
     }
@@ -632,7 +585,7 @@ class Prices extends Eventsmanager {
         }
         if (valuationSetup.valuationStrategy.includes('_02cryptocompare.com')) {
             this.setCustomAlternative(operationValuation.fromPrice, 'ALL-cryptocompare.com');
-            this.setCustomAlternative(operationValuation.toPrice, 'ALL-cryptocompare.com');    
+            this.setCustomAlternative(operationValuation.toPrice, 'ALL-cryptocompare.com');
             this.setCustomAlternative(operationValuation.fromPrice, 'CRYPTO_USD_PLN-cryptocompare.com_nbp.pl');
             this.setCustomAlternative(operationValuation.toPrice, 'CRYPTO_USD_PLN-cryptocompare.com_nbp.pl');
         }
@@ -659,13 +612,12 @@ class Prices extends Eventsmanager {
         if (valuationSetup.valuationSide.includes('_04higher_side')) {
             this.selectHigherSide(operationValuation);
         }
-        
+
         if (valuationSetup.valuationSide.includes('_03lower_side')) {
             this.selectLowerSide(operationValuation);
         }
         if (operationValuation.operation.calculatorStep) {
-            const operationResidenceCurrencyConfig =
-                getAssetConfig(operationValuation.operation.calculatorStep.operationResidenceCurrency);
+            const operationResidenceCurrencyConfig = getAssetConfig(operationValuation.operation.calculatorStep.operationResidenceCurrency);
 
             if (valuationSetup.valuationSide.includes('_02fiat_side')) {
                 if (operationResidenceCurrencyConfig.type === 'fiat') {
@@ -673,8 +625,7 @@ class Prices extends Eventsmanager {
                 }
             }
             if (valuationSetup.valuationSide.includes('_01residence_side')) {
-                this.selectRealSideOrDoNothing(operationValuation,
-                    operationValuation.operation.calculatorStep.operationResidenceCurrency);
+                this.selectRealSideOrDoNothing(operationValuation, operationValuation.operation.calculatorStep.operationResidenceCurrency);
             }
         }
         if (valuationSetup.valuationCTCDiscount) {
@@ -714,7 +665,7 @@ class Prices extends Eventsmanager {
         this.dispatch('progress-changed');
     }
     _receivePriceError(priceResponse) {
-        const queryKey = priceResponse.cbKey; 
+        const queryKey = priceResponse.cbKey;
         const priceEnquire = this.getCachedPrice(queryKey);
         if (!priceEnquire) {
             console.error('Received price with unknown cbKey/queryKey', priceResponse);
@@ -727,9 +678,12 @@ class Prices extends Eventsmanager {
         this.dispatch('progress-changed');
     }
     connectToPriceServer(priceServerAddr) {
-        const socket = openSocket(priceServerAddr);
+        const socket = io(priceServerAddr);
         this.socket = socket; // init first
-        
+        socket.on('error', console.error);
+        socket.on('connect', () => {
+            socket.send('Hello!');
+        });
         socket.on('get-price-result', result => {
             this._receivePrice(result);
         });
@@ -747,7 +701,7 @@ class Prices extends Eventsmanager {
                         return prev + 1;
                     }
                     return prev;
-                }, 0)    
+                }, 0)
             },
             prices: {
                 total: this.cachedPrices.length,
@@ -788,6 +742,7 @@ class Prices extends Eventsmanager {
         const priceQueryKey = this.getPriceQueryKey(priceQuery);
         // never ask twice this same price query
         let priceEnquire = this.getCachedPrice(priceQueryKey);
+        // console.log('getPrice', priceQuery, priceQueryKey, priceEnquire);
         // maybe better return copy of price result - to allow customize price per valuation
         if (!priceEnquire) {
             priceEnquire = {
@@ -806,21 +761,25 @@ class Prices extends Eventsmanager {
                             cbKey: priceQueryKey,
                             date: priceQuery.date,
                             validatedQuery: priceQuery,
-                            alternatives: [{
-                                key: `auto-price-${priceQueryKey}`,
-                                type: 'price',
-                                subtype: 'price-results',
-                                effectiveDate: priceQuery.date,
-                                adapter: 'auto',
-                                fromAsset: priceQuery.fromAsset,
-                                toAsset: priceQuery.toAsset,
-                                results: [{
-                                    key: 'auto-default',
+                            alternatives: [
+                                {
+                                    key: `auto-price-${priceQueryKey}`,
                                     type: 'price',
-                                    value: 1
-                                }]
-                            }] 
-                        }); 
+                                    subtype: 'price-results',
+                                    effectiveDate: priceQuery.date,
+                                    adapter: 'auto',
+                                    fromAsset: priceQuery.fromAsset,
+                                    toAsset: priceQuery.toAsset,
+                                    results: [
+                                        {
+                                            key: 'auto-default',
+                                            type: 'price',
+                                            value: 1
+                                        }
+                                    ]
+                                }
+                            ]
+                        });
                     }, 0);
                 } else {
                     // ask server for price
@@ -857,10 +816,7 @@ class Prices extends Eventsmanager {
 
     /* Operation Valuation */
     getCachedOperationValuation(operationValuationKey) {
-        const operationValuation = this.cachedOperationValuations.find(
-            cachedOperationValuation =>
-                cachedOperationValuation.valuationKey === operationValuationKey
-        );
+        const operationValuation = this.cachedOperationValuations.find(cachedOperationValuation => cachedOperationValuation.valuationKey === operationValuationKey);
         return operationValuation;
     }
     cacheOperationValuation(operationValuationKey, operationValuation) {
@@ -874,7 +830,7 @@ class Prices extends Eventsmanager {
             this.cachedOperationValuations.push(operationValuation);
         } else {
             Object.assign(cachedOperationValuation, operationValuation);
-        }   
+        }
     }
     getOperationValuation(operation, targetAsset) {
         const valuationKey = `${operation.key}-${targetAsset}`;
@@ -905,7 +861,8 @@ class Prices extends Eventsmanager {
             loading: true
         };
         operationValuation.promise = new Promise(resolve => {
-            Promise.all([fromPriceQuery.promise, toPriceQuery.promise]).then(prices => { // <- re-using resolved promises
+            Promise.all([fromPriceQuery.promise, toPriceQuery.promise]).then(prices => {
+                // <- re-using resolved promises
                 // relay on promises order above
                 const fromPrice = prices[0];
                 const toPrice = prices[1];
@@ -924,16 +881,18 @@ class Prices extends Eventsmanager {
                         operationValuation.defaultCustomValue = operationValuation.operation.valuationFromExchange.value;
                         resolvePromise();
                     } else {
-                        const priceEnquire = this.getSimpleExchangePrice(
-                            operation.date, operationValuation.operation.valuationFromExchange.currency, targetAsset);
-                        priceEnquire.promise.then(priceResult => {
-                            const localExchangeRate = this.recalculateSidePrice(priceResult);
-                            operationValuation.defaultCustomValue = operationValuation.operation.valuationFromExchange.value * localExchangeRate;
-                            resolvePromise();
-                        }, error => {
-                            console.error('error resolving price for defaultCustomValue', error, operationValuation.operation.valuationFromExchange, operationValuation.operation);
-                            resolvePromise();
-                        });
+                        const priceEnquire = this.getSimpleExchangePrice(operation.date, operationValuation.operation.valuationFromExchange.currency, targetAsset);
+                        priceEnquire.promise.then(
+                            priceResult => {
+                                const localExchangeRate = this.recalculateSidePrice(priceResult);
+                                operationValuation.defaultCustomValue = operationValuation.operation.valuationFromExchange.value * localExchangeRate;
+                                resolvePromise();
+                            },
+                            error => {
+                                console.error('error resolving price for defaultCustomValue', error, operationValuation.operation.valuationFromExchange, operationValuation.operation);
+                                resolvePromise();
+                            }
+                        );
                     }
                 } else {
                     resolvePromise();

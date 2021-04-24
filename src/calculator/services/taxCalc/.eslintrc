@@ -31,7 +31,7 @@
       "no-console": 0,//
       "no-constant-condition": 2,
       "no-control-regex": 2,
-      "no-debugger": 2,
+      "no-debugger": 0,
       "no-dupe-keys": 2,
       "no-empty": 2,
       "no-empty-character-class": 2,
@@ -118,8 +118,14 @@
       "no-use-before-define": 2,
       "no-var": 2,
       // Stylistic Issues
-      "indent": [2, 4, {
-        "SwitchCase": 0
+      "indent": [0, 4, {
+        "SwitchCase": 1,
+        "MemberExpression": 1,
+        "CallExpression": {"arguments": 1},
+        "FunctionExpression": {"parameters": 1, "body": 1},
+        "FunctionDeclaration":{"parameters": 1, "body": 1},
+        "VariableDeclarator": 1,
+        "outerIIFEBody": 1
       }],
       "arrow-body-style": [2, "as-needed"],
       "arrow-parens": [2, "as-needed"],
@@ -172,7 +178,7 @@
       "wrap-regex": 0,
       // Legacy
       "max-depth": 0,
-      "max-len": [2, 160, {
+      "max-len": [2, 220, {
         "ignoreStrings": true,
         "ignoreTemplateLiterals": true,
         "ignoreComments": true

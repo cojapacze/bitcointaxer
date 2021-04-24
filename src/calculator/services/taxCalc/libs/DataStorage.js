@@ -9,29 +9,32 @@ const db = new PouchDB('test', {
 });
 
 window.db = db;
-  
-db.changes({
-    since: 'now',
-    live: true,
-    include_docs: true
-}).on('change', change => {
-    // handle change
-    // console.log('PouchDB-change', change);
-}).on('complete', info => {
-    // changes() was canceled
-    // console.info('PouchDB-complete', info);
-}).on('error', err => {
-    switch (err.name) {
-    case 'not_found':
-        break;
-    default:
-        console.error('PouchDB-error', err);
-    }
-});
+
+// db.changes({
+//     since: 'now',
+//     live: true,
+//     include_docs: true
+// })
+//     .on('change', change => {
+//         // handle change
+//         // console.log('PouchDB-change', change);
+//     })
+//     .on('complete', info => {
+//         // changes() was canceled
+//         // console.info('PouchDB-complete', info);
+//     })
+//     .on('error', err => {
+//         switch (err.name) {
+//             case 'not_found':
+//                 break;
+//             default:
+//                 console.error('PouchDB-error', err);
+//         }
+//     });
 
 // Add a post
 class DataStorage extends Eventsmanager {
-    filesStorage = {}
+    filesStorage = {};
     constructor(config) {
         super(config);
         window.storage = this;
@@ -65,7 +68,8 @@ class DataStorage extends Eventsmanager {
         });
         db.upsert(_id, () => price);
     }
-    storeOperation(operation) { // , method
+    storeOperation(operation) {
+        // , method
         const _id = toIndexableString({
             date: operation.date,
             // timestamp: operation.timestamp,
@@ -75,7 +79,7 @@ class DataStorage extends Eventsmanager {
         });
         db.upsert(_id, () => operation);
     }
-    readOperation(operation) {        
+    readOperation(operation) {
         const _id = toIndexableString({
             date: operation.date,
             // timestamp: operation.timestamp,

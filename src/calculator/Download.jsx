@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {FormattedMessage} from 'react-intl';
-
+import {DownloadOutlined} from '@ant-design/icons';
 import {Button, Spin} from 'antd';
 
 
@@ -30,7 +30,7 @@ class Download extends React.Component {
           <Button
             onClick={() => operationQueue.downloadReport({}, downloadFilename)}
             type="primary"
-            icon="download"
+            icon={<DownloadOutlined />}
           >{downloadFilename}</Button>
         </center>
 

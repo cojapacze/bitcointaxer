@@ -6,21 +6,20 @@ import {Form, Select} from 'antd';
 import {getBaseConfig} from '../../services/taxCalc/libs/Utils';
 
 class EditSetupCalculatorTaxResidence extends React.Component {
-  state = {}
+  state = {};
   static propTypes = {
     form: PropTypes.object,
-    calculator: PropTypes.object
-  }
+    calculator: PropTypes.object,
+  };
   static getDerivedStateFromProps(props) {
     return props;
   }
   render() {
     const {calculator} = this.state;
     const setup = calculator.getSetup();
-    const {getFieldDecorator} = this.props.form;
     const formItemLayout = {
       labelCol: {span: 8},
-      wrapperCol: {span: 14}
+      wrapperCol: {span: 14},
     };
     if (!setup) {
       return '<div>no calculator setup (calculator)</div>';
@@ -28,36 +27,45 @@ class EditSetupCalculatorTaxResidence extends React.Component {
 
     const taxResidenceConfigs = Object.values(getBaseConfig());
 
-    const makeTaxResidenceOption = taxResidenceConfig =>
-      <Select.Option key={taxResidenceConfig.key} value={taxResidenceConfig.key}>
+    const makeTaxResidenceOption = taxResidenceConfig => (
+      <Select.Option
+        key={taxResidenceConfig.key}
+        value={taxResidenceConfig.key}
+      >
         {taxResidenceConfig.name}
-      </Select.Option>;
-
+      </Select.Option>
+    );
     return (
       <div>
-        <Form className={'compact-form'}>
+        <Form className={'compact-form'} initialValues={{...setup}}>
           <Form.Item
             {...formItemLayout}
-            label={<FormattedMessage
-              id="EditSetupCalculatorTaxResidence.taxResidence"
-              defaultMessage="Tax residence"
-            />}
+            label={
+              <FormattedMessage
+                id="EditSetupCalculatorTaxResidence.taxResidence"
+                defaultMessage="Tax residence"
+              />
+            }
+            name="taxResidence"
           >
-            {getFieldDecorator('taxResidence', {
-              initialValue: setup.taxResidence,
-              rules: [
-                {required: false, message: <FormattedMessage
-                  id="EditSetupCalculatorTaxResidence.taxResidence.required"
-                  defaultMessage="Select your tax residence"
-                />}
-              ]
-            })(
-              <Select
-                onChange={taxResidence => calculator.setTaxResidence(taxResidence)}
-              >
-                {taxResidenceConfigs.map(makeTaxResidenceOption)}
-              </Select>
-            )}
+            <Select
+              rules={[
+                {
+                  required: false,
+                  message: (
+                    <FormattedMessage
+                      id="EditSetupCalculatorTaxResidence.taxResidence.required"
+                      defaultMessage="Select your tax residence"
+                    />
+                  ),
+                },
+              ]}
+              onChange={taxResidence =>
+                calculator.setTaxResidence(taxResidence)
+              }
+            >
+              {taxResidenceConfigs.map(makeTaxResidenceOption)}
+            </Select>
           </Form.Item>
         </Form>
       </div>
@@ -65,4 +73,4 @@ class EditSetupCalculatorTaxResidence extends React.Component {
   }
 }
 
-export default Form.create()(EditSetupCalculatorTaxResidence);
+export default EditSetupCalculatorTaxResidence;

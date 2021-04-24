@@ -25,7 +25,7 @@
     "react/jsx-uses-react": 2,
     "react/jsx-uses-vars": 2,
     "react/react-in-jsx-scope": 2,
-      "comma-dangle": [2, "never"],
+      "comma-dangle": 0,
       "computed-property-spacing": [2, "never"],
       "no-cond-assign": 2,
       "no-console": 0, //
@@ -85,7 +85,7 @@
       "no-new-wrappers": 2,
       "no-octal": 2,
       "no-octal-escape": 2,
-      "no-mixed-operators": 2,
+      "no-mixed-operators": 0,
       // "no-process-env": 2,
       "no-proto": 2,
       "no-redeclare": 2,
@@ -95,7 +95,7 @@
       "no-sequences": 2,
       "no-unused-expressions": 2,
       "no-void": 0,
-      "no-warning-comments": 2,
+      "no-warning-comments": [0, { "terms": ["rem-todo", "fixme", "any other term"], "location": "anywhere" }],
       "no-with": 2,
       "prefer-arrow-callback": 2,
       "radix": 2,
@@ -152,7 +152,7 @@
       }],
       "no-spaced-func": 2,
       "no-ternary": 0,
-      "no-trailing-spaces": 2,
+      "no-trailing-spaces": 0,
       "no-multiple-empty-lines": 2,
       "no-underscore-dangle": 0,
       "one-var": 0,
@@ -173,16 +173,16 @@
       "wrap-regex": 0,
       // Legacy
       "max-depth": 0,
-      "max-len": [2, 160, {
+      "max-len": [2, 240, {
         "ignoreStrings": true,
         "ignoreTemplateLiterals": true,
-        "ignoreComments": false,
+        "ignoreComments": true
       }],
       "max-params": 0,
       "max-statements": 0,
       "no-plusplus": 0,
       "no-prototype-builtins": 2,
       "prefer-template": 2,
-      "template-curly-spacing": [2, "never"],
+      "template-curly-spacing": [2, "never"]
   }
 }
