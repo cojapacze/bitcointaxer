@@ -17,9 +17,7 @@ import TableOperationsCellProfit from './TableOperationsCellProfit';
 import TableOperationsCellNotes from './TableOperationsCellNotes';
 import {PrintAssetLabel} from '../../Print';
 
-
-const
-  VK_DOWN = 40,
+const VK_DOWN = 40,
   VK_ENTER = 13,
   VK_ESC = 27,
   VK_LEFT = 37,
@@ -35,8 +33,8 @@ class TableOperations extends React.Component {
     footer: PropTypes.node,
     colors: PropTypes.bool,
     year: PropTypes.number,
-    addOperationButton: PropTypes.node
-  }
+    addOperationButton: PropTypes.node,
+  };
 
   static getDerivedStateFromProps(props) {
     return props;
@@ -61,23 +59,25 @@ class TableOperations extends React.Component {
           return typeFilters.includes(record.type) && record.fiatToCryptoTrade;
         case 'trade_crypto_crypto': // 'Trade CRYPTO'
           typeFilters.push('trade');
-          return typeFilters.includes(record.type) && record.cryptoToCryptoTrade;
+          return (
+            typeFilters.includes(record.type) && record.cryptoToCryptoTrade
+          );
         default:
           return true;
       }
     }
     const result = checkRecordFilter(filter);
     return result;
-  }
+  };
 
   setSort = (columnKey, order) => {
     this.setState({
       sortedInfo: {
         order: order,
-        columnKey: columnKey
-      }
+        columnKey: columnKey,
+      },
     });
-  }
+  };
   constructor(props) {
     super(props);
     this.operationQueue = props.operationQueue;
@@ -86,7 +86,7 @@ class TableOperations extends React.Component {
     this.state = {
       sortedInfo: {
         order: 'ascend',
-        columnKey: 'date'
+        columnKey: 'date',
       },
       year: props.year,
       pageSize: 30,
@@ -97,35 +97,39 @@ class TableOperations extends React.Component {
       title: props.title,
       footer: props.footer,
       addOperationButton: props.addOperationButton,
-      expandedRows: []
+      expandedRows: [],
     };
-    window.addEventListener('keydown', e => {
-      if (document.activeElement !== document.body) {
-        return;
-      }
-      let unhandled = false;
-      switch (e.keyCode) {
-        case VK_UP: // up
-          this.operationQueue.selectPrev();
-          break;
-        case VK_DOWN: // down
-          this.operationQueue.selectNext();
-          break;
-        case VK_LEFT: // left
-        case VK_RIGHT: // right
-        case VK_ENTER: // enter
-        case VK_SPACE: // space
-        case VK_ESC: // esc
-        default:
-          unhandled = true;
-          console.debug('UNHANDLED KEY', e.keyCode, e);
-          break;
-      }
-      if (!unhandled) {
-        e.preventDefault();
-        e.stopPropagation();
-      }
-    }, true);
+    window.addEventListener(
+      'keydown',
+      e => {
+        if (document.activeElement !== document.body) {
+          return;
+        }
+        let unhandled = false;
+        switch (e.keyCode) {
+          case VK_UP: // up
+            this.operationQueue.selectPrev();
+            break;
+          case VK_DOWN: // down
+            this.operationQueue.selectNext();
+            break;
+          case VK_LEFT: // left
+          case VK_RIGHT: // right
+          case VK_ENTER: // enter
+          case VK_SPACE: // space
+          case VK_ESC: // esc
+          default:
+            unhandled = true;
+            console.debug('UNHANDLED KEY', e.keyCode, e);
+            break;
+        }
+        if (!unhandled) {
+          e.preventDefault();
+          e.stopPropagation();
+        }
+      },
+      true,
+    );
     this.autoUpdate = () => this.forceUpdate();
   }
   componentDidMount() {
@@ -138,16 +142,16 @@ class TableOperations extends React.Component {
   }
   onChangeColors = checked => {
     this.setState({
-      colors: checked
+      colors: checked,
     });
-  }
+  };
 
   getRowClassName = record => {
     if (record.key === this.state.currentOperationKey) {
       return 'selected';
     }
     return '';
-  }
+  };
 
   getRowKey = record => record.key;
 
@@ -155,10 +159,10 @@ class TableOperations extends React.Component {
 
   handleSearch = (selectedKeys, confirm) => {
     console.debug('handleSearch', selectedKeys, confirm);
-  }
+  };
   handleReset = clearFilters => {
     console.debug('handleReset', clearFilters);
-  }
+  };
   render() {
     const {
       page,
@@ -166,26 +170,32 @@ class TableOperations extends React.Component {
       sortedInfo,
       // year,
       calculator,
-      colors
+      colors,
     } = this.state;
     const residenceCurrency = calculator.setup.residenceCurrency;
     const setup = calculator.getSetup();
     const columns = [];
     columns.push({
-      title: <FormattedMessage id="TableOperations.date" defaultMessage="Date"/>,
+      title: (
+        <FormattedMessage id="TableOperations.date" defaultMessage="Date" />
+      ),
       dataIndex: 'date',
       inputType: 'datetime',
       type: 'datetime',
       key: 'column-date',
       width: 180,
       sortOrder: sortedInfo.columnKey === 'date' && sortedInfo.order,
-      render: TableOperationsCellDate.bind(this)
+      render: TableOperationsCellDate.bind(this),
     });
     columns.push({
-      title: <div style={{textAlign: 'right'}}><FormattedMessage id="TableOperations.from" defaultMessage="From"/></div>,
+      title: (
+        <div style={{textAlign: 'right'}}>
+          <FormattedMessage id="TableOperations.from" defaultMessage="From" />
+        </div>
+      ),
       dataIndex: 'from',
       key: 'column-from',
-      render: TableOperationsCellFrom.bind(this)
+      render: TableOperationsCellFrom.bind(this),
     });
     columns.push({
       title: <div style={{textAlign: 'center'}}>◦</div>, // ◯◦
@@ -197,84 +207,173 @@ class TableOperations extends React.Component {
       // filterIcon: true,
       filterMultiple: true,
       filters: [
-        {text: <FormattedMessage id="TableOperations.operation.filter.transfers" defaultMessage="Transfers"/>, value: 'transfers'},
-        {text: <FormattedMessage id="TableOperations.operation.filter.fiatToFiatTrade" defaultMessage="Trade FIAT-FIAT"/>, value: 'trade_fiat_fiat'},
-        {text: <FormattedMessage id="TableOperations.operation.filter.fiatToCryptoTrade" defaultMessage="Buy FIAT-CRYPTO"/>, value: 'trade_fiat_crypto'},
-        {text: <FormattedMessage id="TableOperations.operation.filter.cryptoToFiatTrade" defaultMessage="Sell CRYPTO-FIAT"/>, value: 'trade_crypto_fiat'},
-        {text: <FormattedMessage id="TableOperations.operation.filter.cryptoToCryptoTrade" defaultMessage="Trade Crypto-to-Crypto"/>, value: 'trade_crypto_crypto'}
+        {
+          text: (
+            <FormattedMessage
+              id="TableOperations.operation.filter.transfers"
+              defaultMessage="Transfers"
+            />
+          ),
+          value: 'transfers',
+        },
+        {
+          text: (
+            <FormattedMessage
+              id="TableOperations.operation.filter.fiatToFiatTrade"
+              defaultMessage="Trade FIAT-FIAT"
+            />
+          ),
+          value: 'trade_fiat_fiat',
+        },
+        {
+          text: (
+            <FormattedMessage
+              id="TableOperations.operation.filter.fiatToCryptoTrade"
+              defaultMessage="Buy FIAT-CRYPTO"
+            />
+          ),
+          value: 'trade_fiat_crypto',
+        },
+        {
+          text: (
+            <FormattedMessage
+              id="TableOperations.operation.filter.cryptoToFiatTrade"
+              defaultMessage="Sell CRYPTO-FIAT"
+            />
+          ),
+          value: 'trade_crypto_fiat',
+        },
+        {
+          text: (
+            <FormattedMessage
+              id="TableOperations.operation.filter.cryptoToCryptoTrade"
+              defaultMessage="Trade Crypto-to-Crypto"
+            />
+          ),
+          value: 'trade_crypto_crypto',
+        },
       ],
       onFilter: (value, record) => this.onTypeFilter(record, value),
       width: 100,
-      render: TableOperationsCellOperation.bind(this)
+      render: TableOperationsCellOperation.bind(this),
     });
     columns.push({
-      title: <div style={{textAlign: 'left'}}><FormattedMessage id="TableOperations.to" defaultMessage="To"/></div>,
+      title: (
+        <div style={{textAlign: 'left'}}>
+          <FormattedMessage id="TableOperations.to" defaultMessage="To" />
+        </div>
+      ),
       dataIndex: 'to',
       key: 'column-to',
-      render: TableOperationsCellTo.bind(this)
-
+      render: TableOperationsCellTo.bind(this),
     });
     columns.push({
-      title: <div style={{textAlign: 'right'}}><FormattedMessage id="TableOperations.costBasis" defaultMessage="Cost Basis"/></div>,
+      title: (
+        <div style={{textAlign: 'right'}}>
+          <FormattedMessage
+            id="TableOperations.costBasis"
+            defaultMessage="Cost Basis"
+          />
+        </div>
+      ),
       dataIndex: 'cost',
       key: 'column-cost',
       // sorter: true,
-      render: TableOperationsCellCost.bind(this)
+      render: TableOperationsCellCost.bind(this),
     });
     if (setup.activityType === 'personal') {
       columns.push({
-        title: <div style={{textAlign: 'right'}}><FormattedMessage
-          id="TableOperations.valuation"
-          defaultMessage="{asset} Valuation"
-          values={{
-            asset: <PrintAssetLabel asset={residenceCurrency} colors={colors}/>
-          }}/></div>,
+        title: (
+          <div style={{textAlign: 'right'}}>
+            <FormattedMessage
+              id="TableOperations.valuation"
+              defaultMessage="{asset} Valuation"
+              values={{
+                asset: (
+                  <PrintAssetLabel asset={residenceCurrency} colors={colors} />
+                ),
+              }}
+            />
+          </div>
+        ),
         dataIndex: 'value',
         key: 'column-value',
         // sorter: true,
-        render: TableOperationsCellValuation.bind(this)
+        render: TableOperationsCellValuation.bind(this),
       });
     }
     columns.push({
-      title: <div style={{textAlign: 'center'}}><FormattedMessage id="TableOperations.taxable" defaultMessage="Taxable"/></div>,
+      title: (
+        <div style={{textAlign: 'center'}}>
+          <FormattedMessage
+            id="TableOperations.taxable"
+            defaultMessage="Taxable"
+          />
+        </div>
+      ),
       dataIndex: 'taxable',
       key: 'column-taxable',
       // filters: [
       //   {text: 'Taxable', value: 'taxable'},
       //   {text: 'Non-taxable', value: 'non-taxable'}
       // ],
-      render: TableOperationsCellTaxable.bind(this)
+      render: TableOperationsCellTaxable.bind(this),
     });
     if (setup.activityType === 'business') {
       columns.push({
-        title: <div style={{textAlign: 'right'}}><FormattedMessage id="TableOperations.income" defaultMessage="Income"/></div>,
+        title: (
+          <div style={{textAlign: 'right'}}>
+            <FormattedMessage
+              id="TableOperations.incomes"
+              defaultMessage="Income"
+            />
+          </div>
+        ),
         dataIndex: 'income',
         key: 'column-income',
         // sorter: true,
-        render: TableOperationsCellIncome.bind(this)
+        render: TableOperationsCellIncome.bind(this),
       });
       columns.push({
-        title: <div style={{textAlign: 'right'}}><FormattedMessage id="TableOperations.expense" defaultMessage="Expense"/></div>,
+        title: (
+          <div style={{textAlign: 'right'}}>
+            <FormattedMessage
+              id="TableOperations.expense"
+              defaultMessage="Expense"
+            />
+          </div>
+        ),
         dataIndex: 'expense',
         key: 'column-expense',
         // sorter: true,
-        render: TableOperationsCellExpense.bind(this)
+        render: TableOperationsCellExpense.bind(this),
       });
     }
     if (setup.activityType === 'personal') {
       columns.push({
-        title: <div style={{textAlign: 'right'}}><FormattedMessage id="TableOperations.gainLoss" defaultMessage="Gain / Loss"/></div>,
+        title: (
+          <div style={{textAlign: 'right'}}>
+            <FormattedMessage
+              id="TableOperations.gainLoss"
+              defaultMessage="Gain / Loss"
+            />
+          </div>
+        ),
         dataIndex: 'profit',
         key: 'column-profit',
         // sorter: true,
-        render: TableOperationsCellProfit.bind(this)
+        render: TableOperationsCellProfit.bind(this),
       });
     }
     columns.push({
-      title: <div style={{textAlign: 'right'}}><FormattedMessage id="TableOperations.notes" defaultMessage="Notes"/></div>,
+      title: (
+        <div style={{textAlign: 'right'}}>
+          <FormattedMessage id="TableOperations.notes" defaultMessage="Notes" />
+        </div>
+      ),
       dataIndex: 'notes',
       key: 'column-notes',
-      render: TableOperationsCellNotes.bind(this)
+      render: TableOperationsCellNotes.bind(this),
     });
     this.columns = columns;
 
@@ -291,11 +390,11 @@ class TableOperations extends React.Component {
             pageSize: pageSize,
             current: page,
             onChange: this.onPageChange,
-            showQuickJumper: true
+            showQuickJumper: true,
           }}
           onExpandedRowsChange={newExpandedRows => {
             this.setState({
-              expandedRows: newExpandedRows
+              expandedRows: newExpandedRows,
             });
           }}
           title={renderTableOperationsTitle}
@@ -314,4 +413,3 @@ class TableOperations extends React.Component {
 }
 
 export default TableOperations;
-

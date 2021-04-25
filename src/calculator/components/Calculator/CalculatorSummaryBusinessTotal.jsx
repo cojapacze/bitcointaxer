@@ -57,7 +57,7 @@ class CalculatorSummary extends React.Component {
           {...formItemLayout}
           label={
             <span>
-              * <PrintGainLossLabel gainLoss={calculatorStep.sumGainLoss} />
+              <PrintGainLossLabel gainLoss={calculatorStep.sumGainLoss} />
             </span>
           }
         >

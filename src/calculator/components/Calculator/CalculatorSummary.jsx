@@ -68,24 +68,6 @@ class CalculatorSummary extends React.Component {
           {...formItemLayout}
           label={
             <FormattedMessage
-              id="CalculatorSummary.proceeds"
-              defaultMessage="Proceeds"
-            />
-          }
-        >
-          <div style={{textAlign: 'right'}}>
-            <PrintAsset
-              mode={'text'}
-              value={calculatorStep.sumProceeds}
-              asset={calculatorStep.residenceCurrency}
-              colors={colors}
-            />
-          </div>
-        </InfoItem>
-        <InfoItem
-          {...formItemLayout}
-          label={
-            <FormattedMessage
               id="CalculatorSummary.costBasis"
               defaultMessage="Cost basis"
             />
@@ -100,12 +82,30 @@ class CalculatorSummary extends React.Component {
             />
           </div>
         </InfoItem>
+        <InfoItem
+          {...formItemLayout}
+          label={
+            <FormattedMessage
+              id="CalculatorSummary.proceeds"
+              defaultMessage="Proceeds"
+            />
+          }
+        >
+          <div style={{textAlign: 'right'}}>
+            <PrintAsset
+              mode={'text'}
+              value={calculatorStep.sumProceeds}
+              asset={calculatorStep.residenceCurrency}
+              colors={colors}
+            />
+          </div>
+        </InfoItem>
 
         <InfoItem
           {...formItemLayout}
           label={
             <span>
-              * <PrintGainLossLabel gainLoss={calculatorStep.sumGainLoss} />
+              <PrintGainLossLabel gainLoss={calculatorStep.sumGainLoss} />
             </span>
           }
         >
@@ -118,13 +118,13 @@ class CalculatorSummary extends React.Component {
             />
           </div>
         </InfoItem>
-        <div style={{textAlign: 'right'}}>
+        {/* <div style={{textAlign: 'right'}}>
           * -{' '}
           <FormattedMessage
             id="CalculatorSummary.taxable"
             defaultMessage="taxable"
           />
-        </div>
+        </div> */}
       </div>
     );
   }
