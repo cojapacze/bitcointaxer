@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 // import {getAssetConfig} from '../libs/Utils.js';
 const domain = 'binance.com';
 const adapter = 'DepositHistory.csv';
@@ -29,7 +31,7 @@ function getOperations(file) {
         record = {};
 
         record.date = rawRecord.Date;
-        record.timestamp = Date.parse(record.date);
+        record.timestamp = moment(record.date).valueOf();
         const from = {
             loc: 'wallet',
             amount: parseFloat(rawRecord.Amount),

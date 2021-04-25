@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 const domain = 'bitbay.net';
 const adapter = 'Historia-Transakcje';
 
@@ -26,7 +28,7 @@ function bitbayDate2ISODate(bbDate) {
     const day = bbDate.substr(0, 2),
         month = bbDate.substr(3, 2),
         time = bbDate.substr(11, 8),
-        year = bbDate.substr(6, 4);        
+        year = bbDate.substr(6, 4);
     return `${year}-${month}-${day} ${time}`;
 }
 
@@ -48,39 +50,39 @@ function getOperations(file) {
         record.ex = 'bitbay.net';
         record.marketArr = record.rawCSVLine[0].split(' - ');
         record.date = bitbayDate2ISODate(record.rawCSVLine[1]);
-        record.timestamp = Date.parse(record.date);
+        record.timestamp = moment(record.date).valueOf();
         record.bbOperationType = record.rawCSVLine[2];
         record.bbActionType = record.rawCSVLine[3];
         record.rate = parseFloat(record.rawCSVLine[4]);
         record.amount = parseFloat(record.rawCSVLine[5]);
         record.value = parseFloat(record.rawCSVLine[6]);
         switch (record.bbOperationType) {
-        case 'Kupno':
-            record.from = {
-                loc: 'bitbay.net',
-                amount: record.value,
-                asset: record.marketArr[1]
-            };
-            record.to = {
-                loc: 'bitbay.net',
-                amount: record.amount,
-                asset: record.marketArr[0]
-            };
-            break;
-        case 'Sprzedaż':
-            record.from = {
-                loc: 'bitbay.net',
-                amount: record.amount,
-                asset: record.marketArr[0]
-            };
-            record.to = {
-                loc: 'bitbay.net',
-                amount: record.value,
-                asset: record.marketArr[1]
-            };
-            break;
-        default:
-            Error(`Nieznany typ operacji ${record.bbOperationType}`);
+            case 'Kupno':
+                record.from = {
+                    loc: 'bitbay.net',
+                    amount: record.value,
+                    asset: record.marketArr[1]
+                };
+                record.to = {
+                    loc: 'bitbay.net',
+                    amount: record.amount,
+                    asset: record.marketArr[0]
+                };
+                break;
+            case 'Sprzedaż':
+                record.from = {
+                    loc: 'bitbay.net',
+                    amount: record.amount,
+                    asset: record.marketArr[0]
+                };
+                record.to = {
+                    loc: 'bitbay.net',
+                    amount: record.value,
+                    asset: record.marketArr[1]
+                };
+                break;
+            default:
+                Error(`Nieznany typ operacji ${record.bbOperationType}`);
         }
         operations.push(record);
     }

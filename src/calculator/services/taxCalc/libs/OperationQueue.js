@@ -9,7 +9,7 @@ import {stringLike, getAssetConfig, colorOfHash, timestamp2dateStr} from './Util
 const crypto = require('crypto');
 // const extend = require('extend-shallow');
 
-class OperationQueue extends Eventsmanager {    
+class OperationQueue extends Eventsmanager {
     lastModified = '';
     setModified(since) {
         if (since > this.lastModified || !this.lastModified) {
@@ -67,7 +67,7 @@ class OperationQueue extends Eventsmanager {
         }
         annualStatementYears.sort();
         return annualStatementYears;
-    }
+    };
     getFirstCalculator() {
         const annualStatementYears = this.getAnnualStatementYears();
         const firstYear = annualStatementYears[0];
@@ -237,7 +237,7 @@ class OperationQueue extends Eventsmanager {
         if (this.operationQueueHistory[this.cursor]) {
             this.dispatch('change-currentOperation', this.operationQueueHistory[this.cursor], this.cursor);
         }
-        
+
         return this.operationQueueHistory[this.cursor];
     }
 
@@ -252,7 +252,7 @@ class OperationQueue extends Eventsmanager {
         return this.operationQueueHistory[this.cursor];
     }
     selectNext() {
-        if (this.cursor >= (this.operationQueueHistory.length - 1)) {
+        if (this.cursor >= this.operationQueueHistory.length - 1) {
             return false;
         }
         this.cursor++;
@@ -266,7 +266,7 @@ class OperationQueue extends Eventsmanager {
             if (!a.timestamp || !b.timestamp) {
                 this.console.error('Fatal error, operation without timestamp');
             }
-            // 
+            //
             if (a.timestamp !== b.timestamp) {
                 return a.timestamp - b.timestamp;
             }
@@ -282,22 +282,17 @@ class OperationQueue extends Eventsmanager {
             throw new Error('operation record must contain .date field');
         }
         if (!operation.timestamp) {
+            console.log(operation);
             throw new Error('operation record must contain .timestamp field');
         }
         this.operationCounter++;
         operation.operationQueue = this;
         operation.operationNo = this.operationCounter;
         operation.tags = operation.tags || [];
-        operation.domain = (
-            operation &&
-            operation.sourcefile &&
-            operation.sourcefile.fileAdapter &&
-            operation.sourcefile.fileAdapter.domain) || 'unknown-domain';
+        operation.domain = (operation && operation.sourcefile && operation.sourcefile.fileAdapter && operation.sourcefile.fileAdapter.domain) || 'unknown-domain';
 
         if (!operation.key) {
-            const hash = crypto.createHmac('sha256', `abcdefg${this.operationCounter}`)
-                .update('I love crypto')
-                .digest('hex').substring(0, 16);
+            const hash = crypto.createHmac('sha256', `abcdefg${this.operationCounter}`).update('I love crypto').digest('hex').substring(0, 16);
             operation.key = hash;
         }
         operation.taxYear = parseInt(new Date(operation.timestamp).getFullYear(), 10);
@@ -310,38 +305,22 @@ class OperationQueue extends Eventsmanager {
             operation.to.assetConfig = getAssetConfig(operation.to.asset);
         }
         if (operation.from && operation.from.assetConfig && operation.to && operation.to.assetConfig) {
-            if (
-                operation.from.assetConfig.type === 'cryptocurrency'
-                &&
-                operation.to.assetConfig.type === 'cryptocurrency'
-            ) {
+            if (operation.from.assetConfig.type === 'cryptocurrency' && operation.to.assetConfig.type === 'cryptocurrency') {
                 if (operation.type === 'trade') {
                     operation.cryptoToCryptoTrade = true;
                 }
             }
-            if (
-                operation.from.assetConfig.type === 'fiat'
-                &&
-                operation.to.assetConfig.type === 'fiat'
-            ) {
+            if (operation.from.assetConfig.type === 'fiat' && operation.to.assetConfig.type === 'fiat') {
                 if (operation.type === 'trade') {
                     operation.fiatToFiatTrade = true;
                 }
             }
-            if (
-                operation.from.assetConfig.type === 'fiat'
-                &&
-                operation.to.assetConfig.type === 'cryptocurrency'
-            ) {
+            if (operation.from.assetConfig.type === 'fiat' && operation.to.assetConfig.type === 'cryptocurrency') {
                 if (operation.type === 'trade') {
                     operation.fiatToCryptoTrade = true;
                 }
             }
-            if (
-                operation.from.assetConfig.type === 'cryptocurrency'
-                &&
-                operation.to.assetConfig.type === 'fiat'
-            ) {
+            if (operation.from.assetConfig.type === 'cryptocurrency' && operation.to.assetConfig.type === 'fiat') {
                 if (operation.type === 'trade') {
                     operation.cryptoToFiatTrade = true;
                 }
@@ -415,12 +394,12 @@ class OperationQueue extends Eventsmanager {
                         unusedCosts: calculator.costs
                     }
                 };
-                this.lastCalculator.stocktaking(stocktakingQuery);    
+                this.lastCalculator.stocktaking(stocktakingQuery);
                 this.currentStocktakingOperation = stocktakingQuery;
                 this.dispatch('last-calculator-finish', this.lastCalculator);
             });
         }
-        
+
         const firstCalculator = this.getFirstCalculator();
         if (firstCalculator) {
             firstCalculator.recalculateCalculatorOperations();
@@ -430,8 +409,7 @@ class OperationQueue extends Eventsmanager {
     }
 
     removeOperation(key) {
-        let i,
-            removedOperation;
+        let i, removedOperation;
         for (i = this.operationQueueHistory.length - 1; i >= 0; i -= 1) {
             if (this.operationQueueHistory[i].key === key) {
                 removedOperation = this.operationQueueHistory[i];
@@ -472,7 +450,7 @@ class OperationQueue extends Eventsmanager {
         return false;
     }
     getMissingCost(missingCost) {
-        const result = (missingCost) || false;
+        const result = missingCost || false;
         return result;
     }
     setMissingCost(missingCost, missingCostUpdate) {

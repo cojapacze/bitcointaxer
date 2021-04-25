@@ -1,3 +1,4 @@
+import moment from 'moment';
 
 const domain = 'coinbase.com';
 const adapter = 'transaction_history';
@@ -41,7 +42,7 @@ function getOperations(file) {
         record.rawCSVLineNo = i;
 
         record.date = coinbaseDateToIsoDate(record.rawCSVLine[0]);
-        record.timestamp = Date.parse(record.date) + i * 1000;
+        record.timestamp = moment(record.date).valueOf() + i * 1000;
         record.type = record.rawCSVLine[1];
         record.currency = record.rawCSVLine[2];
         record.asset = record.currency;
@@ -55,17 +56,17 @@ function getOperations(file) {
         record.file = file;
         record.line = i;
         switch (record.type) {
-        case 'Receive':
-        case 'Send':
-            data_transfers.push(record);    
-            break;
-        case 'Buy':
-        case 'Sell':
-        case 'Trade':
-            data_trades.push(record);
-            break;
-        default:
-            Error(`Unknown record type: ${record.type}`);
+            case 'Receive':
+            case 'Send':
+                data_transfers.push(record);
+                break;
+            case 'Buy':
+            case 'Sell':
+            case 'Trade':
+                data_trades.push(record);
+                break;
+            default:
+                Error(`Unknown record type: ${record.type}`);
         }
     }
     for (i = 0; i < data_transfers.length; i += 1) {
@@ -284,7 +285,7 @@ function getOperations(file) {
                         currency: recordA.baseCurrency,
                         value: recordA.baseCurrencyValuationWithFee
                     }
-                });    
+                });
             }
             from = {
                 loc: location,
@@ -347,4 +348,3 @@ export default {
     parseConfig,
     getOperations
 };
-

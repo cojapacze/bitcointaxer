@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 const domain = 'bitbay.net';
 const adapter = 'Historia-Wplaty_Wyplaty';
 
@@ -46,41 +48,41 @@ function getOperations(file) {
         record.ex = 'bitbay.net';
         record.type = 'error';
         record.date = bitbayDate2ISODate(record.rawCSVLine[0]);
-        record.timestamp = Date.parse(record.date);
+        record.timestamp = moment(record.date).valueOf();
         record.bbType = record.rawCSVLine[1];
         record.value = parseFloat(record.rawCSVLine[2]);
         record.currency = record.rawCSVLine[3];
         record.saldo = parseFloat(record.rawCSVLine[4]);
-        
+
         switch (record.bbType) {
-        case 'Wypłata środków':
-            record.type = 'withdraw';
-            record.from = {
-                loc: 'bitbay.net',
-                amount: record.value * -1,
-                asset: record.currency
-            };
-            record.to = {
-                loc: 'wallet',
-                amount: record.value * -1,
-                asset: record.currency
-            };
-            break;
-        case 'Wpłata na rachunek':
-            record.type = 'deposit';
-            record.from = {
-                loc: 'wallet',
-                amount: record.value,
-                asset: record.currency
-            };
-            record.to = {
-                loc: 'bitbay.net',
-                amount: record.value,
-                asset: record.currency
-            };
-            break;
-        default:
-            Error(`Nieznany typ operacji ${record.bbType}`);
+            case 'Wypłata środków':
+                record.type = 'withdraw';
+                record.from = {
+                    loc: 'bitbay.net',
+                    amount: record.value * -1,
+                    asset: record.currency
+                };
+                record.to = {
+                    loc: 'wallet',
+                    amount: record.value * -1,
+                    asset: record.currency
+                };
+                break;
+            case 'Wpłata na rachunek':
+                record.type = 'deposit';
+                record.from = {
+                    loc: 'wallet',
+                    amount: record.value,
+                    asset: record.currency
+                };
+                record.to = {
+                    loc: 'bitbay.net',
+                    amount: record.value,
+                    asset: record.currency
+                };
+                break;
+            default:
+                Error(`Nieznany typ operacji ${record.bbType}`);
         }
         operations.push(record);
     }

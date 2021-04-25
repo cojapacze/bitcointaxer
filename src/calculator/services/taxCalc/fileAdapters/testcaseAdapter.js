@@ -1,4 +1,6 @@
+import moment from 'moment';
 import {getAssetConfig} from '../libs/Utils.js';
+
 let domain = 'testcase';
 const adapter = 'csv';
 
@@ -32,7 +34,7 @@ function getAddress(asset, locationAddress) {
     const found = String(locationAddress).match(addressTest);
     if (found) {
         return found[0];
-    } 
+    }
     return locationAddress;
 }
 
@@ -43,7 +45,7 @@ function getLocation(asset, locationAddress) {
     const found = String(locationAddress).match(addressTest);
     if (found) {
         renderLocation = String(renderLocation).replace(addressTest, '').replace(/:$/, '').trim() || renderLocation || 'unknown location';
-    } 
+    }
     return renderLocation;
 }
 
@@ -64,7 +66,7 @@ function getOperations(file) {
         if (data[i][2] === 'summary') {
             operations.push({
                 date: data[i][0],
-                timestamp: Date.parse(data[i][0]),
+                timestamp: moment(data[i][0]).valueOf(),
                 type: 'summary'
             });
             continue;
@@ -74,7 +76,7 @@ function getOperations(file) {
             txid: data[i][7]
         };
         // debugger;
-        record.timestamp = Date.parse(record.date);
+        record.timestamp = moment(record.date).valueOf();
         record.from = {
             address: getAddress(data[i][3], data[i][1]),
             loc: getLocation(data[i][3], data[i][1]),

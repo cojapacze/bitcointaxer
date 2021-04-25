@@ -1,3 +1,4 @@
+import moment from 'moment';
 
 const parseConfig = {
     type: 'csv',
@@ -13,13 +14,11 @@ function match(file) {
     return false;
 }
 
-
 function getOperations(file) {
     const operations = [];
     const data = file.data;
     let i = 0;
     let record;
-
 
     for (i = 1; i < data.length; i += 1) {
         record = {};
@@ -27,7 +26,7 @@ function getOperations(file) {
         record.rawCSVLine = data[i];
         record.rawCSVLineNo = i;
         record.date = record.rawCSVLine[0];
-        record.timestamp = Date.parse(record.date);
+        record.timestamp = moment(record.date).valueOf();
         record.currency = record.rawCSVLine[1];
         record.baseRate = record.rawCSVLine[2];
         record.residenceCurrency = 'TODO';
@@ -43,4 +42,3 @@ export default {
     match,
     getOperations
 };
-

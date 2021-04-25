@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 const domain = 'poloniex.com';
 const adapter = 'withdrawalHistory';
 
@@ -28,7 +30,7 @@ function getOperations(file) {
         record.rawCSVLine = data[i];
         record.rawCSVLineNo = i;
         record.date = record.rawCSVLine[0];
-        record.timestamp = Date.parse(record.date);
+        record.timestamp = moment(record.date).valueOf();
         record.currency = record.rawCSVLine[1];
         record.asset = record.rawCSVLine[1];
         record.amount = parseFloat(record.rawCSVLine[2]);
@@ -70,4 +72,3 @@ export default {
     parseConfig,
     getOperations
 };
-

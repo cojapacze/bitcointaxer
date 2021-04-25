@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 const domain = 'bitmarket24.pl';
 const adapter = 'historia_transakcji';
 
@@ -46,7 +48,7 @@ function getOperations(file) {
         record.sourcefile = file;
         record.recordRaw = to;
         record.date = to.date;
-        record.timestamp = Date.parse(record.date);
+        record.timestamp = moment(record.date).valueOf();
         record.from = from;
         record.to = to;
         record.fee = fee;

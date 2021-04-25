@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 // https://support.kraken.com/hc/en-us/articles/360001169383-Explanation-of-Ledger-Fields
 // https://support.kraken.com/hc/en-us/articles/115000302707-Ledgers-vs-Trades-Data
 // https://support.kraken.com/hc/en-us/articles/360000678446-Digital-assets-and-cryptocurrencies-available-on-Kraken-and-their-currency-codes-
@@ -32,22 +34,22 @@ function krakenCurrency2ISO(krakenCurrency) {
             iso: 'BCH',
             name: 'Bitcoin Cash',
             type: 'Cryptocurrency'
-        },		 
+        },
         BSV: {
             iso: 'BSV',
             name: 'Bitcoin SV',
             type: 'Cryptocurrency'
-        },	
+        },
         DASH: {
             iso: 'DASH',
             name: 'DASH',
             type: 'Cryptocurrency'
-        },	
+        },
         EOS: {
             iso: 'EOS',
             name: 'EOS',
             type: 'Cryptocurrency'
-        },	
+        },
         GNO: {
             iso: 'GNO',
             name: 'Gnosis',
@@ -57,7 +59,7 @@ function krakenCurrency2ISO(krakenCurrency) {
             iso: 'QTUM',
             name: 'QTUM',
             type: 'Cryptocurrency'
-        },		
+        },
         USDT: {
             iso: 'USDT',
             name: 'Tether',
@@ -68,126 +70,125 @@ function krakenCurrency2ISO(krakenCurrency) {
             name: 'DAO',
             type: 'Cryptocurrency',
             notes: 'delisted'
-        },	
+        },
         XETC: {
             iso: 'ETC',
             name: 'Ethereum Classic',
             type: 'Cryptocurrency'
-        },	
+        },
         XETH: {
             iso: 'ETH',
             name: 'Ethereum',
             type: 'Cryptocurrency'
-        },	
+        },
         XLTC: {
             iso: 'LTC',
             name: 'Litecoin',
             type: 'Cryptocurrency'
-        },	
+        },
         XMLN: {
             iso: 'MLN',
             name: 'Melon',
             type: 'Cryptocurrency'
-        },	
+        },
         XNMC: {
             iso: 'NMC',
             name: 'Namecoin',
             type: 'Cryptocurrency',
             notes: 'delisted'
-        },	
+        },
         XREP: {
             iso: 'REP',
             name: 'Augur',
             type: 'Cryptocurrency'
-        },	
+        },
         XXVN: {
             iso: 'XVN', // not found on cmc
             name: 'Ven',
             type: 'Cryptocurrency',
             notes: 'delisted'
-        },	
+        },
         XICN: {
             iso: 'ICN',
             name: 'Iconomi',
             type: 'Cryptocurrency',
             notes: 'delisted'
-        },	
+        },
         XXBT: {
             iso: 'BTC',
             name: 'Bitcoin',
             type: 'Cryptocurrency'
-        },	
+        },
         XXDG: {
             iso: 'DOGE',
             name: 'Dogecoin',
             type: 'Cryptocurrency'
-        },	
+        },
         XXLM: {
             iso: 'XLM',
             name: 'Stellar Lumens',
             type: 'Cryptocurrency'
-        },	
+        },
         XXMR: {
             iso: 'XMR',
             name: 'Monero',
             type: 'Cryptocurrency'
-        },	
+        },
         XXTZ: {
             iso: 'XTZ',
             name: 'Tezos',
             type: 'Cryptocurrency'
-        },	
+        },
         XXRP: {
             iso: 'XRP',
             name: 'Ripple',
             type: 'Cryptocurrency'
-        },		
+        },
         XZEC: {
             iso: 'ZEC',
             name: 'Zcash',
             type: 'Cryptocurrency'
-        },	
+        },
         ZCAD: {
             iso: 'CAD',
             name: 'Canadian dollar',
             type: 'Fiat currency'
-        },	
+        },
         ZEUR: {
             iso: 'EUR',
             name: 'Euro',
             type: 'Fiat currency'
-        },		
+        },
         ZGBP: {
             iso: 'GBP',
             name: 'Great British Pound',
             type: 'Fiat currency'
-        },	
+        },
         ZJPY: {
             iso: 'JPY',
             name: 'Japanese Yen',
             type: 'Fiat currency'
-        },	
+        },
         ZKRW: {
             iso: 'KRW',
             name: 'South Korean Won',
             type: 'Fiat currency',
             notes: 'no longer accepted'
-        },	
+        },
         ZUSD: {
             iso: 'USD',
             name: 'US Dollar',
             type: 'Fiat currency'
-        },	
+        },
         KFEE: {
             iso: 'KFEE',
             name: 'Kraken Fee Credits',
             type: 'Promotional Credit'
-        }	
-
+        }
     };
     let isoCurrency = krakenCurrency2ISOMap[krakenCurrency];
     if (!isoCurrency) {
-        console.warn('Can\'t find ISO representation of Kraken currency', krakenCurrency);
+        console.warn('Can`t find ISO representation of Kraken currency', krakenCurrency);
         isoCurrency = krakenCurrency;
     }
     return isoCurrency.iso;
@@ -224,18 +225,19 @@ function getOperations(file) {
         record.file = file;
         record.line = i;
         switch (record.type) {
-        case 'deposit':
-        case 'withdrawal':
-            if (record.krakenTxid) { // skip doubled deposits/withdrawals with empty txid
-                data_transfers.push(record);    
-            }
-            break;
-        case 'trade':
-            record.loc = location;
-            data_trades.push(record);
-            break;
-        default:
-            Error(`Unknown record type: ${record.type}`);
+            case 'deposit':
+            case 'withdrawal':
+                if (record.krakenTxid) {
+                    // skip doubled deposits/withdrawals with empty txid
+                    data_transfers.push(record);
+                }
+                break;
+            case 'trade':
+                record.loc = location;
+                data_trades.push(record);
+                break;
+            default:
+                Error(`Unknown record type: ${record.type}`);
         }
     }
 
@@ -279,7 +281,7 @@ function getOperations(file) {
             rawCSVLineNo: record.rawCSVLineNo,
             lines: record.lines,
             date: record.date,
-            timestamp: Date.parse(record.date) - 1000 * 60 * 10,
+            timestamp: moment(record.date).valueOf() - 1000 * 60 * 10,
             recordRaw: record,
             type: record.transferType,
             ex: domain,
@@ -311,7 +313,7 @@ function getOperations(file) {
                 i += 1;
             } else {
                 console.debug(domain, adapter, '!no fee');
-            }    
+            }
         }
         if (recordA.type === 'trade' && recordA.amount < 0 && recordB.type === 'trade' && recordB.amount > 0) {
             from = recordA;
@@ -330,7 +332,7 @@ function getOperations(file) {
             recordRaw: from,
             line: from.line,
             date: from.date,
-            timestamp: Date.parse(from.date) - 1000 * 60 * 10,
+            timestamp: moment(from.date).valueOf() - 1000 * 60 * 10,
             type: 'trade',
             ex: domain,
             fee: fee,
@@ -352,4 +354,3 @@ export default {
     parseConfig,
     getOperations
 };
-

@@ -1,3 +1,4 @@
+import moment from 'moment';
 
 const utils = require('../libs/Utils');
 const domain = 'bitbay.net';
@@ -34,24 +35,24 @@ function bitbayDate2ISODate(bbDate) {
 
 function getBitbayOperationType(type) {
     switch (type) {
-    case 'Wpłata na rachunek':
-    case 'Wypłata środków':
-        return 'transfer';
-    case 'Pobranie środków z transakcji z rachunku':
-    case 'Otrzymanie środków z transakcji na rachunek':
-    case 'Pobranie prowizji za transakcję':
-        return 'trade';
-    case 'Utworzenie rachunku':
-    case 'Blokada środków':
-    case 'Zwrot za usunięcie oferty na rachunek':
-    case 'Blokada środków na rachunku':
-    case 'Anulowanie oferty poniżej wartości minimalnych':
-        return 'ignore';
-    // case 'Pobranie prowizji za transakcję':
-    //     console.warn('Nie uwzgledniam prowizji');
-    //     return 'ignore';
-    default:
-        return type;
+        case 'Wpłata na rachunek':
+        case 'Wypłata środków':
+            return 'transfer';
+        case 'Pobranie środków z transakcji z rachunku':
+        case 'Otrzymanie środków z transakcji na rachunek':
+        case 'Pobranie prowizji za transakcję':
+            return 'trade';
+        case 'Utworzenie rachunku':
+        case 'Blokada środków':
+        case 'Zwrot za usunięcie oferty na rachunek':
+        case 'Blokada środków na rachunku':
+        case 'Anulowanie oferty poniżej wartości minimalnych':
+            return 'ignore';
+        // case 'Pobranie prowizji za transakcję':
+        //     console.warn('Nie uwzgledniam prowizji');
+        //     return 'ignore';
+        default:
+            return type;
     }
 }
 function orderDataTrades(data_trades) {
@@ -107,9 +108,7 @@ function getOperations(file) {
     let i = 0;
     const data_transfers = [];
     let data_trades = [];
-    let from,
-        record,
-        to;
+    let from, record, to;
     for (i = 1; i < data.length; i += 1) {
         record = {};
         record.rawCSVLine = data[i];
@@ -126,15 +125,15 @@ function getOperations(file) {
         record.sourcefile = file;
 
         switch (record.type) {
-        case 'transfer':
-            data_transfers.push(record);
-            break;
-        case 'trade':
-            record.loc = 'bitbay.net';
-            data_trades.push(record);
-            break;
-        default:
-            Error('Unknown type');
+            case 'transfer':
+                data_transfers.push(record);
+                break;
+            case 'trade':
+                record.loc = 'bitbay.net';
+                data_trades.push(record);
+                break;
+            default:
+                Error('Unknown type');
         }
     }
     for (i = 0; i < data_transfers.length; i += 1) {
@@ -175,7 +174,7 @@ function getOperations(file) {
             recordRaw: record,
             // rawCSVLineNo: record.rawCSVLineNo,
             date: record.date,
-            timestamp: Date.parse(record.date),
+            timestamp: moment(record.date).valueOf(),
             type: record.transferType,
             ex: 'bitbay.net',
             from: from,
@@ -218,7 +217,7 @@ function getOperations(file) {
         operation = {
             sourcefile: file,
             date: from.date,
-            timestamp: Date.parse(from.date),
+            timestamp: moment(from.date).valueOf(),
             recordRaw: from,
             type: 'trade',
             ex: 'bitbay.net',

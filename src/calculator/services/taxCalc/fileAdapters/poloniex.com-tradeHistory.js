@@ -1,3 +1,4 @@
+import moment from 'moment';
 
 const domain = 'poloniex.com';
 const adapter = 'tradeHistory';
@@ -28,7 +29,7 @@ function getOperations(file) {
         record.rawCSVLineNo = i;
         record.sourcefile = file;
         record.date = record.rawCSVLine[0];
-        record.timestamp = Date.parse(record.date);
+        record.timestamp = moment(record.date).valueOf();
         record.market = record.rawCSVLine[1];
         record.marketArr = record.market.split('/');
         record.category = record.rawCSVLine[2];
@@ -42,12 +43,12 @@ function getOperations(file) {
         record.quote_total_less_fee = parseFloat(record.rawCSVLine[10]);
         record.recordRaw = record;
         switch (record.category) {
-        case 'Exchange':
-        case 'Settlement':
-        case 'Margin trade':
-            break;
-        default:
-            console.error(`Unknown record category: ${record.category}!`, record);
+            case 'Exchange':
+            case 'Settlement':
+            case 'Margin trade':
+                break;
+            default:
+                console.error(`Unknown record category: ${record.category}!`, record);
         }
         if (record.type === 'Buy') {
             from = {

@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 import Eventsmanager from './Eventsmanager';
 import {CONFIG} from './Utils';
 
@@ -8,49 +10,49 @@ class User extends Eventsmanager {
         const ct = lang.substr(3);
         if (ct) {
             switch (ct) {
-            case 'us':
-                return 'us';
-            case 'pl':
-                return 'pl';
-            case 'ca':
-                return 'ca';
-            case 'uk':
-                return 'uk';
-            case 'de':
-                return 'de';
-            case 'fr':
-                return 'fr';
-            case 'se':
-                return 'se';
-            case 'dk':
-                return 'dk';
-            case 'au':
-                return 'au';
-            case 'ru':
-                return 'ru';
-            default:
+                case 'us':
+                    return 'us';
+                case 'pl':
+                    return 'pl';
+                case 'ca':
+                    return 'ca';
+                case 'uk':
+                    return 'uk';
+                case 'de':
+                    return 'de';
+                case 'fr':
+                    return 'fr';
+                case 'se':
+                    return 'se';
+                case 'dk':
+                    return 'dk';
+                case 'au':
+                    return 'au';
+                case 'ru':
+                    return 'ru';
+                default:
             }
         }
         if (ln) {
             switch (ln) {
-            case 'en':
-                return 'us';
+                case 'en':
+                    return 'us';
                 // return 'uk';
                 // return 'au';
                 // return 'ca';
-            case 'pl':
-                return 'pl';
-            case 'de':
-                return 'de';
-            case 'fr':
-                return 'fr';
-            case 'sv':
-                return 'se';
-            case 'da':
-                return 'dk';
-            case 'ru':
-                return 'ru';
-            default:
+                case 'pl':
+                    return 'pl';
+                case 'de':
+                    return 'de';
+                case 'fr':
+                    return 'fr';
+                case 'sv':
+                    return 'se';
+                case 'da':
+                    return 'dk';
+                case 'ru':
+                    return 'ru';
+                default:
             }
         }
         return 'global';
@@ -58,27 +60,27 @@ class User extends Eventsmanager {
     getLocaleCurrencyDefault() {
         const location = this.getLocaleLocationDefault();
         switch (location) {
-        case 'us':
-            return 'usd';
-        case 'pl':
-            return 'pln';
-        case 'ca':
-            return 'cad';
-        case 'uk':
-            return 'gbp';
-        case 'de':
-            return 'eur';
-        case 'fr':
-            return 'eur';
-        case 'se':
-            return 'sek';
-        case 'dk':
-            return 'dkk';
-        case 'au':
-            return 'aud';
-        case 'ru':
-            return 'rub';
-        default:
+            case 'us':
+                return 'usd';
+            case 'pl':
+                return 'pln';
+            case 'ca':
+                return 'cad';
+            case 'uk':
+                return 'gbp';
+            case 'de':
+                return 'eur';
+            case 'fr':
+                return 'eur';
+            case 'se':
+                return 'sek';
+            case 'dk':
+                return 'dkk';
+            case 'au':
+                return 'aud';
+            case 'ru':
+                return 'rub';
+            default:
         }
         return 'btc';
     }
@@ -100,7 +102,7 @@ class User extends Eventsmanager {
             },
             key: '1000-01-01_00:00:00_000_INIT_CONF',
             date: '1000-01-01 00:00:00',
-            timestamp: Date.parse('1000-01-01 00:00:00'),
+            timestamp: moment('1000-01-01 00:00:00').valueOf(),
             type: 'setup',
             dataSource: {
                 type: 'system'

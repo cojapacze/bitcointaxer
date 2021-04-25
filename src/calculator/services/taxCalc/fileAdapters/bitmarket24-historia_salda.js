@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 const domain = 'bitmarket24.pl';
 const adapter = 'historia_salda';
 
@@ -31,7 +33,7 @@ function getOperations(file) {
         record.date_start = record.rawCSVLine[1];
         record.date_end = record.rawCSVLine[2];
         record.date = record.date_end;
-        record.timestamp = Date.parse(record.date);
+        record.timestamp = moment(record.date).valueOf();
         record.currency = record.rawCSVLine[3];
         record.asset = record.currency;
         record.amount = parseFloat(record.rawCSVLine[4]);

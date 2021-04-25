@@ -1,3 +1,4 @@
+import moment from 'moment';
 // import {getAssetConfig} from '../libs/Utils.js';
 const domain = 'wavesplatform.com';
 const adapter = 'fullOrders';
@@ -12,7 +13,8 @@ const parseConfig = {
 
 function match(file) {
     //               0    1              2                3                           4                  5                6                 7              8                   9                 10                 11              12         13       14        15     16                 17                    18                     19                 20         21                22         23                24
-    const pattern = 'Date,Transaction ID,Transaction type,Blockchain transaction type,Price asset ticker,Price asset name,Price asset value,Price asset ID,Amount asset ticker,Amount asset name,Amount asset value,Amount asset ID,Fee ticker,Fee name,Fee value,Fee ID,Transaction sender,Transaction recipient,Transaction attachment,Transaction height,Alias name,Token description,Token name,Can reissue token,Precision';
+    const pattern =
+        'Date,Transaction ID,Transaction type,Blockchain transaction type,Price asset ticker,Price asset name,Price asset value,Price asset ID,Amount asset ticker,Amount asset name,Amount asset value,Amount asset ID,Fee ticker,Fee name,Fee value,Fee ID,Transaction sender,Transaction recipient,Transaction attachment,Transaction height,Alias name,Token description,Token name,Can reissue token,Precision';
     if (file.content.substr(0, pattern.length) === pattern) {
         return true;
     }
@@ -36,19 +38,19 @@ function getOperations(file) {
     for (i = 1; i < data.length; i += 1) {
         const rawRecord = data[i];
         switch (rawRecord[2]) {
-        case 'exchange-sell':
-        case 'exchange-buy':
-        case 'receive':
-            break;
-        default:
-            continue;
+            case 'exchange-sell':
+            case 'exchange-buy':
+            case 'receive':
+                break;
+            default:
+                continue;
         }
         // const markets = rawRecord[1].split('-');
         const type = rawRecord[2].split('-');
         record = {};
 
         record.date = wavesplatformDateToIsoDate(rawRecord[0]);
-        record.timestamp = Date.parse(record.date);
+        record.timestamp = moment(record.date).valueOf();
         const from = {
             loc: location,
             amount: parseFloat(rawRecord[6].replace(/,/g, '')),

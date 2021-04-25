@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 const utils = require('../libs/Utils');
 
 const domain = 'bitmarket.pl';
@@ -8,7 +10,6 @@ const location = 'bitmarket.pl';
 const parseConfig = {
     type: 'xlsx'
 };
-
 
 function match(file) {
     if (file.detectedFiletype === 'xlsx') {
@@ -22,9 +23,7 @@ function getOperations(file) {
     const operations = [];
     const data = file.data;
     let i = 0;
-    let from,
-        record,
-        to;
+    let from, record, to;
     // rawRecord example:
     // Data operacji: "2019-01-01 21:18:01"
     // Kurs: 14046.5397
@@ -40,25 +39,25 @@ function getOperations(file) {
         const rawRecord = data[i];
         rawRecord.rawCSVLineNo = i + 1;
         switch (rawRecord['Rodzaj operacji']) {
-        case 'Wypłata z konta':
-            data_withdraw.push(rawRecord);
-            break;
-        case 'Wpłata na konto':
-            data_deposit.push(rawRecord);
-            break;
-        case 'Wymiana na giełdzie':
-            if (rawRecord.Kwota < 0) {
-                data_trade_taken.push(rawRecord);
-            } else {
-                data_trade_received.push(rawRecord);
-            }
-            break;
-        case 'Anulowanie oferty':
-        case 'Złożenie oferty':
-            // ignore
-            break;
-        default:
-            console.error('unknown record', rawRecord);
+            case 'Wypłata z konta':
+                data_withdraw.push(rawRecord);
+                break;
+            case 'Wpłata na konto':
+                data_deposit.push(rawRecord);
+                break;
+            case 'Wymiana na giełdzie':
+                if (rawRecord.Kwota < 0) {
+                    data_trade_taken.push(rawRecord);
+                } else {
+                    data_trade_received.push(rawRecord);
+                }
+                break;
+            case 'Anulowanie oferty':
+            case 'Złożenie oferty':
+                // ignore
+                break;
+            default:
+                console.error('unknown record', rawRecord);
         }
     }
 
@@ -100,7 +99,7 @@ function getOperations(file) {
             recordRaw: rawRecordReceived,
             rawCSVLineNo: rawRecordReceived.rawCSVLineNo,
             date: rawRecordReceived['Data operacji'],
-            timestamp: Date.parse(rawRecordReceived['Data operacji']),
+            timestamp: moment(rawRecordReceived['Data operacji']).valueOf(),
             type: 'trade',
             ex: domain,
             from: from,
@@ -132,7 +131,7 @@ function getOperations(file) {
             recordRaw: rawRecord,
             rawCSVLineNo: rawRecord.rawCSVLineNo,
             date: rawRecord['Data operacji'],
-            timestamp: Date.parse(rawRecord['Data operacji']),
+            timestamp: moment(rawRecord['Data operacji']).valueOf(),
             type: 'deposit',
             ex: domain,
             from: from,
@@ -157,7 +156,7 @@ function getOperations(file) {
             recordRaw: rawRecord,
             rawCSVLineNo: rawRecord.rawCSVLineNo,
             date: rawRecord['Data operacji'],
-            timestamp: Date.parse(rawRecord['Data operacji']),
+            timestamp: moment(rawRecord['Data operacji']).valueOf(),
             type: 'withdraw',
             ex: domain,
             from: from,
