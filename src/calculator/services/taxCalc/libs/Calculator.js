@@ -3,13 +3,7 @@ import Prices from './Prices';
 import Console from './Console';
 import OperationQueue from './OperationQueue';
 import {ExportToCsv} from 'export-to-csv';
-import {
-    getTaxResidenceConfig,
-    getTaxResidenceCurrency,
-    getInventorySortFunction,
-    getSortCostsFunction,
-    CONFIG
-} from './Utils';
+import {getTaxResidenceConfig, getTaxResidenceCurrency, getInventorySortFunction, getSortCostsFunction, CONFIG} from './Utils';
 const crypto = require('crypto');
 const extend = require('extend-shallow');
 
@@ -59,7 +53,7 @@ class Calculator extends Eventsmanager {
             this.recalculateInventory(this.endDate);
         });
         this.setPrevCalculator(config.prevCalculator);
-        
+
         setup.taxResidenceConfig = getTaxResidenceConfig(setup.taxResidence);
         setup.residenceCurrency = getTaxResidenceCurrency(setup.taxResidence);
 
@@ -145,11 +139,7 @@ class Calculator extends Eventsmanager {
             }
             operationProceedsRemained -= operationProceedsTaken;
             const fraction = operationProceedsTaken / operationProceeds;
-            const contract = this.takeOperationContract(
-                operation,
-                fraction,
-                i
-            );
+            const contract = this.takeOperationContract(operation, fraction, i);
             contracts.push(contract);
         }
         return contracts;
@@ -163,13 +153,11 @@ class Calculator extends Eventsmanager {
             if (
                 operation.taxable &&
                 // splitOperationIntoContracts &&
-                operation.valuation && operation.valuation.resolved &&
+                operation.valuation &&
+                operation.valuation.resolved &&
                 operation.calculatorStep.operationProceeds > splitOperationIntoContractsUpToValue
             ) {
-                const contracts = this.splitOperationIntoContracts(
-                    operation,
-                    splitOperationIntoContractsUpToValue
-                );
+                const contracts = this.splitOperationIntoContracts(operation, splitOperationIntoContractsUpToValue);
                 operations.push(...contracts);
             } else {
                 operations.push(operation);
@@ -182,9 +170,7 @@ class Calculator extends Eventsmanager {
     }
 
     setupCalculatorOperations() {
-        const {
-            trackLocations
-        } = this.setup;
+        const {trackLocations} = this.setup;
         const operations = [];
         this.operations.forEach(operation => {
             if (!trackLocations) {
@@ -211,7 +197,7 @@ class Calculator extends Eventsmanager {
         const stocktackingOpen = {
             autoOperation: true,
             date: `${this.year}-01-01 00:00:00`,
-            timestamp: new Date(`${this.year}-01-01 00:00:00`).getTime(),
+            timestamp: new Date(`${this.year}-01-01T00:00:00`).getTime(),
             type: 'stocktaking',
             subtype: 'open',
             taxYear: this.year,
@@ -222,7 +208,7 @@ class Calculator extends Eventsmanager {
         const stocktackingClose = {
             autoOperation: true,
             date: `${this.year}-12-31 23:59:59`,
-            timestamp: new Date(`${this.year}-12-31 23:59:59`).getTime(),
+            timestamp: new Date(`${this.year}-12-31T23:59:59`).getTime(),
             type: 'stocktaking',
             subtype: 'close',
             taxYear: this.year,
@@ -241,10 +227,7 @@ class Calculator extends Eventsmanager {
         this.setupDefaultOperations('new');
     }
     getHash(str) {
-        const hash = crypto.createHmac('sha256', str)
-            .update('I love crypto')
-            .digest('hex')
-            .substring(0, 16);
+        const hash = crypto.createHmac('sha256', str).update('I love crypto').digest('hex').substring(0, 16);
         return hash;
     }
     getInputHash() {
@@ -455,14 +438,13 @@ class Calculator extends Eventsmanager {
         }
         const toResidenceCurrency = this.setup.residenceCurrency;
         if (fromResidenceCurrency !== toResidenceCurrency) {
-            const simplePriceEnquiry = 
-                this.prices.getSimpleExchangePrice(date, fromResidenceCurrency, toResidenceCurrency);
+            const simplePriceEnquiry = this.prices.getSimpleExchangePrice(date, fromResidenceCurrency, toResidenceCurrency);
             if (simplePriceEnquiry.resolved) {
                 const exitExchangeRate = this.prices.recalculateSidePrice(simplePriceEnquiry.priceResponse);
                 prevCosts.forEach(cost => {
                     cost.costBasis *= exitExchangeRate;
                     cost.rate = cost.costBasis / cost.amount;
-                });    
+                });
             } else {
                 // waiting for pices
                 // console.log('Waiting for price...');
@@ -541,8 +523,7 @@ class Calculator extends Eventsmanager {
         let i, operation;
         if (!unfinishedPricePromises || unfinishedPricePromises.length < 1) {
             this.console.success('No unfinished price query.');
-            const brokenOperations =
-            operations.filter(operationF => operationF.currentErrors && operationF.currentErrors.length);
+            const brokenOperations = operations.filter(operationF => operationF.currentErrors && operationF.currentErrors.length);
             if (brokenOperations) {
                 // brokenOperations.reverse();
                 for (i = brokenOperations.length - 1; i >= 0; i -= 1) {
@@ -616,7 +597,7 @@ class Calculator extends Eventsmanager {
         };
         result.calculator = this;
         return result;
-    }
+    };
 
     // *** calculator methods ***
     putBalance(loc, amount, asset) {
@@ -638,7 +619,7 @@ class Calculator extends Eventsmanager {
             this.currentWarnings.push(`⚠ Wybranie: ${amount} ${asset} z lokalizacji: ${loc} bez istniejących środków.`);
             this.locBalances[loc][asset] = 0;
         }
-        if ((this.locBalances[loc][asset]) < amount) {
+        if (this.locBalances[loc][asset] < amount) {
             this.currentWarnings.push(`⚠ Wybranie: ${amount} ${asset} z lokalizacji: ${loc} bez wystarczających środków, było tylko: ${this.locBalances[loc][asset]} ${asset}.`);
         }
         this.locBalances[loc][asset] -= amount;
@@ -688,15 +669,13 @@ class Calculator extends Eventsmanager {
             }
             assetGroup.amount += cost.amount;
             assetGroup.costBasis += cost.costBasis;
-            assetGroup.rate = (assetGroup.amount) ? (assetGroup.costBasis / assetGroup.amount) : '-';
-            assetGroup.children.push(Object.assign(
-                {},
-                cost,
-                {
+            assetGroup.rate = assetGroup.amount ? assetGroup.costBasis / assetGroup.amount : '-';
+            assetGroup.children.push(
+                Object.assign({}, cost, {
                     key: `${cost.asset}-${i}`,
                     prevOperation: this.operationQueue.getOperationByKey(cost.operationKey)
-                }
-            ));
+                })
+            );
         });
         this.costs = sortedArr.map(groupedCost => ({
             amount: groupedCost.amount,
@@ -725,12 +704,14 @@ class Calculator extends Eventsmanager {
             costElement = costsList[i];
             // wybieramy koszt wg assetu i lokalizacji (jezeli ma byc uwzgledniania)
             if (costElement.asset === asset && (oneQueue || costElement.loc === loc)) {
-                if (costElement.amount <= amount) { // uzywamy calego elementu kosztu
+                if (costElement.amount <= amount) {
+                    // uzywamy calego elementu kosztu
                     amount -= costElement.amount; // zmniejsz brakujaca ilosc o cala ilosc w elemencie kosztu
                     costBasis += costElement.costBasis; // zsumuj wybrany koszt
                     costsTaken.push(costElement); // zrzuc wybrany koszt
                     costsList.splice(i, 1); // usun uzyty w calosci element kosztu
-                } else if (costElement.amount > amount) { // jezeli potrzebna mniejsza ilosc niz w elemencie kosztu
+                } else if (costElement.amount > amount) {
+                    // jezeli potrzebna mniejsza ilosc niz w elemencie kosztu
                     // stworz kopie biezacego kosztu, dla nowego obiektu reszty, ktorym zostanie napisany
                     costElement = Object.assign({}, costElement);
                     // stworz kopie biezacego kosztu, dla wybranej jego czesci
@@ -742,7 +723,7 @@ class Calculator extends Eventsmanager {
                     costElement.costBasis -= costPart.costBasis; // obniz calkowity koszt elementy kosztu
                     // *.rate sie nie zmienia, gdyz wybieramy proporcjonalnie amount i costBasis
                     // nadpisz reszte
-                    costsList[i] = costElement; 
+                    costsList[i] = costElement;
                     // zapisz koszt
                     costsTaken.push(costPart);
                     costBasis += costPart.costBasis;
@@ -776,7 +757,7 @@ class Calculator extends Eventsmanager {
                 if (residenceCurrency === asset) {
                     missingCostPart.costBasis = missingCostPart.amount;
                     missingCostPart.rate = 1;
-                }    
+                }
             }
             const missingCostPartSaved = this.operationQueue.getMissingCostByKey(missingCostKey);
             extend(missingCostPart, missingCostPartSaved);
@@ -785,7 +766,7 @@ class Calculator extends Eventsmanager {
             }
             this.currentErrors.push({
                 type: 'missing-cost',
-                msg: `⚠ Unknown source of asset ${amount} ${asset} at ${loc} - [${currentQueueMethod} (${(oneQueue) ? 'oneQueue' : 'trackLocations'})]`,
+                msg: `⚠ Unknown source of asset ${amount} ${asset} at ${loc} - [${currentQueueMethod} (${oneQueue ? 'oneQueue' : 'trackLocations'})]`,
                 missingCostPart: missingCostPart
             });
 
@@ -827,7 +808,6 @@ class Calculator extends Eventsmanager {
         this.costs.push(cost);
     }
 
-
     /* trade calculator */
     atomic(operation, atomicType) {
         const setup = this.getSetup();
@@ -844,33 +824,33 @@ class Calculator extends Eventsmanager {
         const toAssetTurnoverObject = this.getAssetTurnoverObject(operation.to.asset);
 
         switch (atomicType) {
-        // case 'contract':
-        case 'trade':
-            fromAssetTurnoverObject.sell += operation.from.amount;
-            fromAssetTurnoverObject.total += operation.from.amount;
-            toAssetTurnoverObject.buy += operation.to.amount;
-            toAssetTurnoverObject.total += operation.to.amount;
-            break;
-        case 'transfer':
-            fromAssetTurnoverObject.transfer += operation.from.amount;
-            fromAssetTurnoverObject.total += operation.from.amount;
-            toAssetTurnoverObject.transfer += operation.to.amount;
-            toAssetTurnoverObject.total += operation.to.amount;
-            // oneQueue = false;
-            break;
-        case 'atomic-swap':
-            fromAssetTurnoverObject.transfer += operation.from.amount;
-            fromAssetTurnoverObject.total += operation.from.amount;
-            toAssetTurnoverObject.transfer += operation.to.amount;
-            toAssetTurnoverObject.total += operation.to.amount;
-            fromAssetTurnoverObject.sell += operation.from.amount;
-            fromAssetTurnoverObject.total += operation.from.amount;
-            toAssetTurnoverObject.buy += operation.to.amount;
-            toAssetTurnoverObject.total += operation.to.amount;
-            break;
-        default:
-            console.error(`Unknown atomicType: ${atomicType}`, operation);
-            throw new Error(`Unknown atomicType: ${atomicType}`);
+            // case 'contract':
+            case 'trade':
+                fromAssetTurnoverObject.sell += operation.from.amount;
+                fromAssetTurnoverObject.total += operation.from.amount;
+                toAssetTurnoverObject.buy += operation.to.amount;
+                toAssetTurnoverObject.total += operation.to.amount;
+                break;
+            case 'transfer':
+                fromAssetTurnoverObject.transfer += operation.from.amount;
+                fromAssetTurnoverObject.total += operation.from.amount;
+                toAssetTurnoverObject.transfer += operation.to.amount;
+                toAssetTurnoverObject.total += operation.to.amount;
+                // oneQueue = false;
+                break;
+            case 'atomic-swap':
+                fromAssetTurnoverObject.transfer += operation.from.amount;
+                fromAssetTurnoverObject.total += operation.from.amount;
+                toAssetTurnoverObject.transfer += operation.to.amount;
+                toAssetTurnoverObject.total += operation.to.amount;
+                fromAssetTurnoverObject.sell += operation.from.amount;
+                fromAssetTurnoverObject.total += operation.from.amount;
+                toAssetTurnoverObject.buy += operation.to.amount;
+                toAssetTurnoverObject.total += operation.to.amount;
+                break;
+            default:
+                console.error(`Unknown atomicType: ${atomicType}`, operation);
+                throw new Error(`Unknown atomicType: ${atomicType}`);
         }
 
         let operationProceeds = 0; // NaN
@@ -879,15 +859,7 @@ class Calculator extends Eventsmanager {
         let operationExpenses = 0;
         let operationIncome = 0;
         // physic queue
-        const costsTaken = this.takeCost(
-            queueMethod,
-            oneQueue,
-            operation.from.asset,
-            operation.from.amount,
-            operation.from.loc,
-            residenceCurrency,
-            operation
-        );
+        const costsTaken = this.takeCost(queueMethod, oneQueue, operation.from.asset, operation.from.amount, operation.from.loc, residenceCurrency, operation);
         operationCostBasis = costsTaken.costBasis;
 
         if (taxableEvent) {
@@ -910,31 +882,9 @@ class Calculator extends Eventsmanager {
             operationProceeds = operationCostBasis;
         }
         if (atomicType === 'transfer') {
-            costsTaken.usedCosts.forEach(cost => 
-                this.putCost(
-                    cost.date,
-                    cost.timestamp,
-                    operation.to.asset,
-                    cost.amount,
-                    cost.costBasis,
-                    operation.from.loc,
-                    operation.to.loc,
-                    residenceCurrency,
-                    operation
-                )
-            );
+            costsTaken.usedCosts.forEach(cost => this.putCost(cost.date, cost.timestamp, operation.to.asset, cost.amount, cost.costBasis, operation.from.loc, operation.to.loc, residenceCurrency, operation));
         } else {
-            this.putCost(
-                operation.date,
-                operation.timestamp,
-                operation.to.asset,
-                operation.to.amount,
-                operationProceeds,
-                operation.from.loc,
-                operation.to.loc,
-                residenceCurrency,
-                operation
-            );
+            this.putCost(operation.date, operation.timestamp, operation.to.asset, operation.to.amount, operationProceeds, operation.from.loc, operation.to.loc, residenceCurrency, operation);
         }
         // calculate Gain / Loss
         operationGainLoss = operationProceeds - operationCostBasis;
@@ -1007,7 +957,6 @@ class Calculator extends Eventsmanager {
                 // zapisz oryginalne wartosci
                 cost.stocktakingPriceObj = stocktakingPriceObj;
 
-
                 cost.stocktakingCostBasisAmount = cost.amount;
                 cost.stocktakingCostBasis = cost.costBasis;
                 cost.stocktakingCostBasisRate = cost.rate;
@@ -1019,20 +968,20 @@ class Calculator extends Eventsmanager {
                 cost.stocktakingValue = cost.stocktakingCostBasis;
                 cost.stocktakingAmount = cost.stocktakingCostBasisAmount;
                 switch (stocktakingMode) {
-                case 'lower':
-                    // obniz wycene do cen rynkowych
-                    if (cost.stocktakingCostBasisRate > cost.stocktakingMarketRate) {
+                    case 'lower':
+                        // obniz wycene do cen rynkowych
+                        if (cost.stocktakingCostBasisRate > cost.stocktakingMarketRate) {
+                            cost.stocktakingPriceUsed = true;
+                            cost.stocktakingRate = cost.stocktakingMarketRate;
+                            cost.stocktakingValue = cost.stocktakingMarketValue;
+                        }
+                        break;
+                    case 'market':
                         cost.stocktakingPriceUsed = true;
                         cost.stocktakingRate = cost.stocktakingMarketRate;
                         cost.stocktakingValue = cost.stocktakingMarketValue;
-                    }
-                    break;
-                case 'market':
-                    cost.stocktakingPriceUsed = true;
-                    cost.stocktakingRate = cost.stocktakingMarketRate;
-                    cost.stocktakingValue = cost.stocktakingMarketValue;
-                    break;
-                default:
+                        break;
+                    default:
                 }
                 // valuation = cost.stocktakingValue;
             } else {
@@ -1128,38 +1077,38 @@ class Calculator extends Eventsmanager {
         this.currentWarnings = [];
         this.currentErrors = [];
         switch (operation.type) {
-        case 'contract':
-            operation.calculatorStep = this.trade(operation);
-            break;
-        case 'trade':
-            operation.calculatorStep = this.trade(operation);
-            break;
-        case 'transfer':
-            operation.calculatorStep = this.transfer(operation);
-            break;
-        case 'atomic-swap':
-            operation.calculatorStep = this.atomic(operation, 'atomic-swap');
-            break;
-        case 'withdraw':
-            operation.calculatorStep = this.withdraw(operation);
-            break;
-        case 'deposit':
-            operation.calculatorStep = this.deposit(operation);
-            break;
-        case 'summary':
-            operation.calculatorStep = this.summary(operation);
-            break;
-        case 'stocktaking':
-            operation.calculatorStep = this.summary(operation);
-            operation.operationStocktaking = this.stocktaking(operation);
-            break;
-        case 'price':
-        case 'config':
-        case 'setup':
-        default:
-            // debugger;
-            operation.calculatorStep = this.summary(operation, operation.type);
-            break;
+            case 'contract':
+                operation.calculatorStep = this.trade(operation);
+                break;
+            case 'trade':
+                operation.calculatorStep = this.trade(operation);
+                break;
+            case 'transfer':
+                operation.calculatorStep = this.transfer(operation);
+                break;
+            case 'atomic-swap':
+                operation.calculatorStep = this.atomic(operation, 'atomic-swap');
+                break;
+            case 'withdraw':
+                operation.calculatorStep = this.withdraw(operation);
+                break;
+            case 'deposit':
+                operation.calculatorStep = this.deposit(operation);
+                break;
+            case 'summary':
+                operation.calculatorStep = this.summary(operation);
+                break;
+            case 'stocktaking':
+                operation.calculatorStep = this.summary(operation);
+                operation.operationStocktaking = this.stocktaking(operation);
+                break;
+            case 'price':
+            case 'config':
+            case 'setup':
+            default:
+                // debugger;
+                operation.calculatorStep = this.summary(operation, operation.type);
+                break;
         }
         operation.currentErrors = this.currentErrors;
         operation.currentWarnings = this.currentWarnings;
@@ -1188,8 +1137,7 @@ class Calculator extends Eventsmanager {
             }
             this.stats.operationsByDay[operationDateDay].push(operation);
 
-            if (!this.stats.mostPopularDay ||
-                this.stats.mostPopularDay.length < this.stats.operationsByDay[operationDateDay].length) {
+            if (!this.stats.mostPopularDay || this.stats.mostPopularDay.length < this.stats.operationsByDay[operationDateDay].length) {
                 this.stats.mostPopularDay = this.stats.operationsByDay[operationDateDay];
             }
 
@@ -1199,19 +1147,14 @@ class Calculator extends Eventsmanager {
                 this.stats.operationsByMonth[operationDateMonth] = [];
             }
             this.stats.operationsByMonth[operationDateMonth].push(operation);
-            if (!this.stats.mostPopularMonth ||
-                this.stats.mostPopularMonth.length < this.stats.operationsByMonth[operationDateMonth].length) {
+            if (!this.stats.mostPopularMonth || this.stats.mostPopularMonth.length < this.stats.operationsByMonth[operationDateMonth].length) {
                 this.stats.mostPopularMonth = this.stats.operationsByMonth[operationDateMonth];
             }
 
             // recalculate operation valuation
             if (operation.valuation && operation.valuation.resolved) {
                 this.prices.recalculateOperationValuation(operation.valuation);
-                if (
-                    !operation.customSetup &&
-                    setup.cryptoToCryptoTaxable &&
-                    operation.cryptoToCryptoTrade &&
-                    operation.valuation.value < setup.cryptoToCryptoTaxableFromValuationThreshold) {
+                if (!operation.customSetup && setup.cryptoToCryptoTaxable && operation.cryptoToCryptoTrade && operation.valuation.value < setup.cryptoToCryptoTaxableFromValuationThreshold) {
                     operation.taxable = false;
                 }
             }
@@ -1229,7 +1172,6 @@ class Calculator extends Eventsmanager {
         this.uncalculatedOperations = false;
     }
 
-
     recalculateInventory(date) {
         console.debug('Recalculate Inventory', date, this.costs);
     }
@@ -1237,16 +1179,16 @@ class Calculator extends Eventsmanager {
         let desc = `${operation.type} ${operation.from.asset}→${operation.to.asset}`;
         if (operation.type === 'trade') {
             if (operation.cryptoToCryptoTrade) {
-                desc = (`Zamiana ${operation.from.asset} na ${operation.to.asset}`);
+                desc = `Zamiana ${operation.from.asset} na ${operation.to.asset}`;
             }
             if (operation.fiatToCryptoTrade) {
-                desc = (`Zakup ${operation.to.asset} za ${operation.from.asset}`);
+                desc = `Zakup ${operation.to.asset} za ${operation.from.asset}`;
             }
             if (operation.cryptoToFiatTrade) {
-                desc = (`Sprzedaz ${operation.from.asset} za ${operation.to.asset}`);
+                desc = `Sprzedaz ${operation.from.asset} za ${operation.to.asset}`;
             }
             if (operation.fiatToFiatTrade) {
-                desc = (`Zamiana ${operation.from.asset} na ${operation.to.asset}`);
+                desc = `Zamiana ${operation.from.asset} na ${operation.to.asset}`;
             }
         }
         return desc;
@@ -1286,8 +1228,7 @@ class Calculator extends Eventsmanager {
                 return;
             }
             i += 1;
-            const exchangeRateDifference =
-                operation.calculatorStep.operationExpenses - operation.calculatorStep.operationCostBasis;
+            const exchangeRateDifference = operation.calculatorStep.operationExpenses - operation.calculatorStep.operationCostBasis;
             const extraLost = 0;
             const extraProfit = 0;
             let notes = '';
@@ -1297,10 +1238,10 @@ class Calculator extends Eventsmanager {
                     notes += `Strata kursowa ${(-1 * exchangeRateDifference).toFixed(2)}${this.setup.residenceCurrency}`;
                 } else {
                     // extraProfit = exchangeRateDifference;
-                    notes += `Zysk kursowy ${(exchangeRateDifference).toFixed(2)}${this.setup.residenceCurrency}`;
+                    notes += `Zysk kursowy ${exchangeRateDifference.toFixed(2)}${this.setup.residenceCurrency}`;
                 }
             }
-    
+
             const line = {
                 no: i, // 1
                 date: operation.date, // 2
@@ -1311,7 +1252,7 @@ class Calculator extends Eventsmanager {
                 sell: operation.calculatorStep.operationIncome.toFixed(2), // 7
                 otherIncome: extraProfit.toFixed(2), // 8
                 sumIncome: (operation.calculatorStep.operationIncome + extraProfit).toFixed(2), // 9
-                buy: (operation.calculatorStep.operationExpenses).toFixed(2), // 10
+                buy: operation.calculatorStep.operationExpenses.toFixed(2), // 10
                 otherCosts: (0).toFixed(2), // 11
                 otherPays: (0).toFixed(2), // 12
                 otherExpenses: extraLost.toFixed(2), // 13
@@ -1326,12 +1267,12 @@ class Calculator extends Eventsmanager {
     }
     downloadCSV() {
         const filename = this.getFilename();
-        const options = { 
+        const options = {
             filename: filename,
             fieldSeparator: ',',
             quoteStrings: '"',
             decimalSeparator: '.',
-            showLabels: true, 
+            showLabels: true,
             showTitle: true,
             title: `bitcointaxer, ${this.year}`,
             useTextFile: false,
@@ -1356,9 +1297,9 @@ class Calculator extends Eventsmanager {
                 'Uwagi'
             ]
         };
-         
+
         const csvExporter = new ExportToCsv(options);
-         
+
         csvExporter.generateCsv(this.getKPIRData());
     }
 }
