@@ -5,7 +5,7 @@ import moment from 'moment';
 // https://support.kraken.com/hc/en-us/articles/360000678446-Digital-assets-and-cryptocurrencies-available-on-Kraken-and-their-currency-codes-
 const domain = 'kraken.com';
 const adapter = 'ledgers';
-const location = 'binance.com';
+const location = 'kraken.com';
 
 const parseConfig = {
     type: 'csv',
@@ -18,6 +18,13 @@ function match(file) {
     if (file.content.substr(0, pattern.length) === pattern) {
         return true;
     }
+
+    //                0      1       2      3      4         5        6        7       8     9
+    const pattern2 = '"txid","refid","time","type","subtype","aclass","asset","amount","fee","balance"';
+    if (file.content.substr(0, pattern2.length) === pattern2) {
+        return true;
+    }
+
     return false;
 }
 
@@ -189,7 +196,11 @@ function krakenCurrency2ISO(krakenCurrency) {
     let isoCurrency = krakenCurrency2ISOMap[krakenCurrency];
     if (!isoCurrency) {
         console.warn('Can`t find ISO representation of Kraken currency', krakenCurrency);
-        isoCurrency = krakenCurrency;
+        isoCurrency = {
+            iso: krakenCurrency,
+            name: krakenCurrency,
+            type: 'Cryptocurrency'
+        };
     }
     return isoCurrency.iso;
 }
@@ -213,11 +224,19 @@ function getOperations(file) {
         record.refid = record.rawCSVLine[1];
         record.time = record.rawCSVLine[2];
         record.type = record.rawCSVLine[3];
-        record.aclass = record.rawCSVLine[4];
-        record.krakenAsset = record.rawCSVLine[5];
-        record.amount = parseFloat(record.rawCSVLine[6]);
-        record.fee = record.rawCSVLine[7];
-        record.balance = record.rawCSVLine[7];
+        if (record.rawCSVLine.length < 9) {
+            record.aclass = record.rawCSVLine[4];
+            record.krakenAsset = record.rawCSVLine[5];
+            record.amount = parseFloat(record.rawCSVLine[6]);
+            record.fee = record.rawCSVLine[7];
+            record.balance = record.rawCSVLine[8];
+        } else {
+            record.aclass = record.rawCSVLine[5];
+            record.krakenAsset = record.rawCSVLine[6];
+            record.amount = parseFloat(record.rawCSVLine[7]);
+            record.fee = record.rawCSVLine[8];
+            record.balance = record.rawCSVLine[9];
+        }
 
         record.date = record.time;
         record.currency = krakenCurrency2ISO(record.krakenAsset);
