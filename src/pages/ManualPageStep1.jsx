@@ -76,6 +76,26 @@ const CalculatorPageStep1 = () => (
               values={globalMessageValues}
             />
           </p>
+          <p>
+            <strong>NEW:</strong>
+            <ol>
+              <li>Orders</li>
+              <li>
+                <a href="https://www.binance.com/en/my/wallet/history/deposit-crypto">
+                  Transations
+                </a>
+              </li>
+              <li>⬇️</li>
+              <li>Export Transaction Records</li>
+              <li>Generate</li>
+              <li>Download</li>
+              <li>xxx.zip</li>
+              <li>xxx.zip &raquo; xxx.csv</li>
+            </ol>
+          </p>
+          <p>
+            <i>OLD:</i>
+          </p>
           <ul>
             <li>
               TradeHistory.xlsx{' '}
