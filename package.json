@@ -27,7 +27,7 @@
     "hsv-rgb": "^1.0.0",
     "intl-pluralrules": "^1.2.2",
     "js-sha256": "^0.9.0",
-    "jspdf": "^2.5.2",
+    "jspdf": "^3.0.1",
     "jspdf-autotable": "^3.8.4",
     "lowdb": "^1.0.0",
     "mixin-deep": "^2.0.1",
