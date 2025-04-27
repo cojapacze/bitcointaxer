@@ -23,8 +23,8 @@ const CONFIG = {
         fixupResidenceCurrencyCostBasis: true,
         showFine: false
     },
-    testcaseFile: '/tests/testcase_11.csv',
-    priceServerAddress: 'https://newio01.priceserver.bitcointaxer.org:8088'
+    testcaseFile: '/tests/testcase_12.csv',
+    priceServerAddress: 'https://priceserver.bitcointaxer.org'
 };
 const assetsConfig = {
     LTC: {

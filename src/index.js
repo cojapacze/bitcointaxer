@@ -1,3 +1,6 @@
+import process from 'process';
+window.process = process;
+console.log('process', process);
 import React from 'react';
 import {render} from 'react-dom';
 import Root from './Root';

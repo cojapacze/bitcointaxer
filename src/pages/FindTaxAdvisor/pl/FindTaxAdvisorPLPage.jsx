@@ -25,7 +25,7 @@ class FindTaxAdvisorPL extends React.Component {
           </ul>
           <p>od poniedziałku do piątku w godzinach od 7.00 do 18.00.</p>
           <p>Po połączeniu system zapowiedzi głosowych poprowadzi po menu, prosząc o wybranie cyfry odpowiadającej interesującemu zagadnieniu, np. <strong>podatek dochodowy od osób fizycznych</strong>.</p>
-          <a targe="_blank" href="https://www.kis.gov.pl/zalatwianie-spraw/udzielanie-informacji">odwiedź stronę</a>
+          <a href="https://www.kis.gov.pl/zalatwianie-spraw/udzielanie-informacji" target="_blank" rel="noreferrer">odwiedź stronę</a>
         </Col>
       </Row>
     </div>;

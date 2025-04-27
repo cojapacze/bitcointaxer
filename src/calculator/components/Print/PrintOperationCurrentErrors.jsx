@@ -9,7 +9,7 @@ import PrintAsset from './PrintAsset';
 function PrintOperationCurrentErrors(props) {
   const {operation, colors} = props;
   if (!operation || !operation.currentErrors || !operation.currentErrors.length) {
-    return <div colors={colors}>no-errors</div>;
+    return <FormattedMessage colors={colors} defaultMessage="no-errors"/>;
   }
   return <div>
     <List

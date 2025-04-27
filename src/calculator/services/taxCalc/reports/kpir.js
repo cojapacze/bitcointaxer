@@ -1,4 +1,4 @@
-import * as JsPDF from 'jspdf';
+import {jsPDF} from 'jspdf';
 import 'jspdf-autotable';
 
 function addKpirPage(pdf, year, month, pageNo, data, pageSum, monthSum, yearSum, prevYearSum) {
@@ -278,8 +278,8 @@ function joinSumaries(summaryA, summaryB) {
 function kpir(calculator) {
     // const counters = new Counters(calculator.year);
     const filename = `${calculator.getFilename()}.pdf`;
-    const pdf = new JsPDF('p'); // OK, created
-    
+    // eslint-disable-next-line
+    const pdf = new jsPDF('p'); // OK, created
     pdf.text(`Podatkowa Ksiega Przychodow i Rozchodow, ${calculator.year}r.`, 14, 15);
     pdf.setFont('helvetica');
     pdf.setFontSize(8);

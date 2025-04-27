@@ -11,8 +11,10 @@ import {faCheckCircle, faExclamationCircle} from '@fortawesome/free-solid-svg-ic
 import {CONFIG} from '../../../services/taxCalc/libs/Utils';
 
 function PrintUnknownAssetTitle(props) {
+  //eslint-disable-next-line
   const {missingCostPart} = props;
   let result = <span style={{color: 'red'}}><FontAwesomeIcon icon={faExclamationCircle} style={{marginRight: '4px'}} /> <FormattedMessage id="TableOperations.unknownAsset" defaultMessage="unknown asset"/></span>;
+  //eslint-disable-next-line
   if (missingCostPart.errorResolved) {
     result = <span style={{color: 'green'}}><FontAwesomeIcon icon={faCheckCircle} style={{marginRight: '4px'}} /> <FormattedMessage id="TableOperations.newAsset" defaultMessage="new asset"/></span>;
   }
