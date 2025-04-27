@@ -16,7 +16,7 @@ const links = [
 
 const copyright = (
   <div>
-    Copyright <CopyrightCircleOutlined /> 2017-2020 timescraper.com
+    Copyright <CopyrightCircleOutlined /> 2017-2025 timescraper.com
   </div>
 );
 
